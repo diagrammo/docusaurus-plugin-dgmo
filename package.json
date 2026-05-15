@@ -1,0 +1,75 @@
+{
+  "name": "docusaurus-plugin-dgmo",
+  "version": "0.1.0",
+  "description": "Docusaurus plugin to render DGMO diagrams from fenced code blocks at build time. Thin wrapper around remark-dgmo that handles client-module registration.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diagrammo/docusaurus-plugin-dgmo.git"
+  },
+  "homepage": "https://github.com/diagrammo/docusaurus-plugin-dgmo#readme",
+  "bugs": {
+    "url": "https://github.com/diagrammo/docusaurus-plugin-dgmo/issues"
+  },
+  "keywords": [
+    "docusaurus",
+    "docusaurus-plugin",
+    "dgmo",
+    "diagrammo",
+    "diagram",
+    "diagrams",
+    "mdx",
+    "markdown",
+    "remark"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./remark": {
+      "types": "./dist/remark.d.ts",
+      "import": "./dist/remark.js"
+    },
+    "./client": "./dist/docusaurus-client.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "pretest": "pnpm build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "pnpm build && cd tests/fixture && pnpm install --no-frozen-lockfile && pnpm exec docusaurus build && node ../../scripts/assert-build-output.mjs",
+    "test:e2e:rspack": "USE_RSPACK=1 pnpm test:e2e",
+    "prepublishOnly": "pnpm build && pnpm test"
+  },
+  "peerDependencies": {
+    "@diagrammo/dgmo": "^0.15.0",
+    "@docusaurus/core": "^3.0.0"
+  },
+  "dependencies": {
+    "remark-dgmo": "file:../remark-dgmo"
+  },
+  "devDependencies": {
+    "@diagrammo/dgmo": "^0.15.0",
+    "@docusaurus/types": "^3.10.0",
+    "@types/node": "^22.10.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
+  }
+}
