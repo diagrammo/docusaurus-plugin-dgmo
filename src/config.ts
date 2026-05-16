@@ -11,10 +11,25 @@ export interface DefineConfigOptions {
   /** Options forwarded to `remark-dgmo` (palette, theme, className, etc.). */
   dgmo?: DgmoOptions;
   /**
-   * By default we set `markdown.format = 'md'` if the user hasn't set it,
-   * because remark-dgmo emits raw HTML nodes that MDX rejects with
-   * "Cannot handle unknown node `raw`". Pass `true` to opt out — only do
-   * this if you're using a rehype-raw-style adapter.
+   * Build for MDX-format pipelines.
+   *
+   * Docusaurus 3 parses every `.md`/`.mdx` file through MDX by default, but
+   * raw `html` mdast nodes (what remark-dgmo emits in its default mode) are
+   * rejected by MDX with `Cannot handle unknown node "raw"`. Two paths:
+   *
+   *   - `mdx: false` (default): force `markdown.format = 'md'` if the user
+   *     hasn't set it. Pure-markdown parsing, no JSX — but raw html nodes
+   *     accepted.
+   *   - `mdx: true`: forward `mdx: true` to remark-dgmo so it emits an
+   *     `mdxJsxFlowElement` instead. Leaves `markdown.format` alone (so the
+   *     site uses Docusaurus's default `'mdx'`) and unlocks JSX, frontmatter
+   *     React imports, etc. alongside dgmo blocks.
+   */
+  mdx?: boolean;
+  /**
+   * Escape hatch: skip the auto-set of `markdown.format = 'md'` even in
+   * non-MDX mode. Only set this if you're wiring `rehype-raw` (or similar)
+   * yourself to make MDX accept raw HTML nodes.
    */
   skipMarkdownFormat?: boolean;
 }
@@ -59,11 +74,25 @@ export async function defineConfig(
 ): Promise<Config> {
   const remarkDgmoModule = await import('remark-dgmo');
   const remarkDgmo = remarkDgmoModule.default;
-  const remarkInstance = options.dgmo ? [remarkDgmo, options.dgmo] : remarkDgmo;
+
+  // In MDX mode, forward `mdx: true` to remark-dgmo so it emits an
+  // mdxJsxFlowElement (a `<div dangerouslySetInnerHTML={…}/>` wrapper) that
+  // MDX accepts. Merge with any user-provided dgmo options.
+  const dgmoOptions: DgmoOptions | undefined =
+    options.mdx || options.dgmo
+      ? { ...options.dgmo, ...(options.mdx ? { mdx: true } : null) }
+      : undefined;
+  const remarkInstance: unknown = dgmoOptions
+    ? [remarkDgmo, dgmoOptions]
+    : remarkDgmo;
 
   const config = await resolveInput(input);
 
-  if (!options.skipMarkdownFormat) {
+  // MDX mode: leave `markdown.format` alone — Docusaurus's default is 'mdx',
+  // which is exactly what we want. The user can still override.
+  // Non-MDX mode: force `markdown.format = 'md'` so raw html mdast nodes
+  // survive (MDX rejects them with `Cannot handle unknown node "raw"`).
+  if (!options.skipMarkdownFormat && !options.mdx) {
     const markdown = (config.markdown ?? {}) as Record<string, unknown>;
     if (markdown.format === undefined) markdown.format = 'md';
     config.markdown = markdown as Config['markdown'];

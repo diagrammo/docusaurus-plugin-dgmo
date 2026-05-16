@@ -155,4 +155,27 @@ describe('defineConfig', () => {
     expect(entry[0]).toBe(remarkDgmo);
     expect(entry[1]).toEqual({ palette: 'catppuccin' });
   });
+
+  it('mdx: true sets dgmo.mdx and leaves markdown.format untouched', async () => {
+    const out = await defineConfig(
+      base({ presets: [['classic', { docs: {} }]] }),
+      { mdx: true }
+    );
+    expect(out.markdown?.format).toBeUndefined();
+    const preset = out.presets?.[0] as [string, Record<string, any>];
+    const entry = preset[1].docs.remarkPlugins[0];
+    expect(Array.isArray(entry)).toBe(true);
+    expect(entry[0]).toBe(remarkDgmo);
+    expect(entry[1]).toEqual({ mdx: true });
+  });
+
+  it('mdx: true merges with explicit dgmo options', async () => {
+    const out = await defineConfig(
+      base({ presets: [['classic', { docs: {} }]] }),
+      { mdx: true, dgmo: { palette: 'catppuccin' } }
+    );
+    const preset = out.presets?.[0] as [string, Record<string, any>];
+    const entry = preset[1].docs.remarkPlugins[0];
+    expect(entry[1]).toEqual({ palette: 'catppuccin', mdx: true });
+  });
 });

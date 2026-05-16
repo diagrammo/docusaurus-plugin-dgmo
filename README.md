@@ -47,6 +47,19 @@ export default defineConfig(
 );
 ```
 
+### MDX support
+
+By default `defineConfig` sets `markdown.format = 'md'` because the rendered diagrams are emitted as raw HTML nodes that MDX rejects. If you want JSX (component imports, frontmatter expressions, etc.) in the same files as your dgmo blocks, opt in:
+
+```ts
+export default defineConfig(
+  { /* …config… */ },
+  { mdx: true }
+);
+```
+
+This forwards `mdx: true` to `remark-dgmo` so it emits an `mdxJsxFlowElement` (`<div dangerouslySetInnerHTML={…} />`) which MDX accepts. `markdown.format` is left alone, so Docusaurus's default `'mdx'` parser runs and your files get full MDX features.
+
 ## Configure (manual)
 
 If `defineConfig` doesn't fit (custom preset, deeply dynamic config, you need to inspect the wiring), do it by hand:
@@ -76,7 +89,7 @@ The async-function default export is required because `remark-dgmo` is ESM-only 
 
 ## Use
 
-Drop a fenced block with the language `dgmo` into any `.md` file in your `docs/`, `blog/`, or `pages/` directory. MDX files aren't supported without an additional `rehype-raw`-style adapter — the `markdown: { format: 'md' }` setting forces every file through the markdown parser.
+Drop a fenced block with the language `dgmo` into any `.md` (or `.mdx` with `mdx: true`) file in your `docs/`, `blog/`, or `pages/` directory.
 
 ````markdown
 ```dgmo
