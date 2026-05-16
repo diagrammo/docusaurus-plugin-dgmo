@@ -14,46 +14,37 @@ pnpm add docusaurus-plugin-dgmo @diagrammo/dgmo
 
 ## Configure
 
-Two things go into `docusaurus.config.ts`. The plugin handles asset registration; the remark plugin gets wired into each preset slot manually (Docusaurus's plugin API has no hook to auto-inject into a sibling preset).
+Wrap your `docusaurus.config.ts` with `defineConfig`. The helper injects the remark plugin into your classic preset's docs/blog/pages slots, sets `markdown.format = 'md'` (raw-HTML output is incompatible with MDX), and registers `docusaurus-plugin-dgmo`. Nothing else to wire.
 
 ```ts
 // docusaurus.config.ts
-import type { Config } from '@docusaurus/types';
+import { defineConfig } from 'docusaurus-plugin-dgmo/config';
 
-// Default-export an async function so the config can dynamically import the
-// ESM-only `remark-dgmo` plugin. A sync default export with top-level await
-// fails under the jiti loader Docusaurus uses to read the config.
-export default async function createConfig(): Promise<Config> {
-  const remarkDgmo = (await import('docusaurus-plugin-dgmo/remark')).default;
-
-  return {
-    // …
-
-    // REQUIRED: this plugin emits raw HTML AST nodes. Docusaurus 3 routes
-    // every .md/.mdx file through MDX by default, and MDX rejects raw
-    // nodes with "Cannot handle unknown node `raw`". Force pure-markdown
-    // (CommonMark) parsing for the whole site.
-    markdown: { format: 'md' },
-
-    plugins: ['docusaurus-plugin-dgmo'],
-    presets: [
-      [
-        'classic',
-        {
-          docs: {
-            remarkPlugins: [remarkDgmo],
-          },
-          blog: {
-            remarkPlugins: [remarkDgmo],
-          },
-          pages: {
-            remarkPlugins: [remarkDgmo],
-          },
-        },
-      ],
+export default defineConfig({
+  title: 'My Docs',
+  url: 'https://example.com',
+  baseUrl: '/',
+  presets: [
+    [
+      'classic',
+      {
+        docs: { sidebarPath: './sidebars.ts' },
+        blog: { showReadingTime: true },
+      },
     ],
-  };
-}
+  ],
+});
+```
+
+That's the whole integration. `defineConfig` returns `Promise<Config>`; Docusaurus accepts a promise as the default config export.
+
+Pass remark-dgmo options as a second argument:
+
+```ts
+export default defineConfig(
+  { /* …config… */ },
+  { dgmo: { palette: 'catppuccin', colorMode: 'auto' } }
+);
 ```
 
 The plugin's `getClientModules()` registers two assets:
@@ -107,12 +98,39 @@ The shipped `remark-dgmo/client.css` keys on `[data-theme="dark"]` — the conve
 
 ## How it works
 
-1. The plugin registers `remark-dgmo`'s CSS and a Docusaurus-shaped client wrapper via `getClientModules()`.
-2. You wire `remarkPlugins: [remarkDgmo]` into the preset slots you want diagrams in (with `remarkDgmo` imported via the async-function config pattern above).
+1. `defineConfig` is an async helper that dynamically imports the ESM-only `remark-dgmo` plugin, then injects it into every `docs` / `blog` / `pages` slot in your classic preset (or any standalone `@docusaurus/plugin-content-*` entry), sets `markdown.format = 'md'`, and adds `'docusaurus-plugin-dgmo'` to `plugins[]`.
+2. The plugin itself registers `remark-dgmo`'s CSS and a Docusaurus-shaped client wrapper via `getClientModules()`.
 3. At build time, the remark plugin walks the mdast, finds `` ```dgmo `` blocks, calls `render()` from `@diagrammo/dgmo` once per theme under default `colorMode: 'auto'`, and replaces the block with an `html` node carrying the rendered wrappers.
 4. The client script tightens each SVG's `viewBox` after every route change.
 
 All rendering happens at build time. The browser ships only the inline SVG + the small CSS rules.
+
+## Manual setup (advanced)
+
+If `defineConfig` doesn't fit (custom preset, deeply dynamic config, you need to inspect the wiring), do it by hand:
+
+```ts
+// docusaurus.config.ts
+import type { Config } from '@docusaurus/types';
+
+export default async function createConfig(): Promise<Config> {
+  const remarkDgmo = (await import('docusaurus-plugin-dgmo/remark')).default;
+  return {
+    // …
+    markdown: { format: 'md' },
+    plugins: ['docusaurus-plugin-dgmo'],
+    presets: [
+      ['classic', {
+        docs:  { remarkPlugins: [remarkDgmo] },
+        blog:  { remarkPlugins: [remarkDgmo] },
+        pages: { remarkPlugins: [remarkDgmo] },
+      }],
+    ],
+  };
+}
+```
+
+The async-function default export is required because `remark-dgmo` is ESM-only and the jiti loader Docusaurus uses to read the config rejects top-level `await` in a sync default export.
 
 ## License
 

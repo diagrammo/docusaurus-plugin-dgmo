@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     remark: 'src/remark.ts',
+    config: 'src/config.ts',
     'docusaurus-client': 'src/docusaurus-client.ts',
   },
   format: ['esm'],
