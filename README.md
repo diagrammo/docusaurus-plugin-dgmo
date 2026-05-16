@@ -88,6 +88,19 @@ A -> B
 
 See the [`remark-dgmo` README](https://github.com/diagrammo/remark-dgmo) for the full option matrix.
 
+## Working reference site
+
+[`tests/fixture/`](./tests/fixture/) is a complete minimal Docusaurus 3 site running this plugin. It's the smallest correct configuration we know of, with all the non-obvious gotchas (async-function config export, `markdown: { format: 'md' }`, `future.faster`) called out inline. Copy [`tests/fixture/docusaurus.config.ts`](./tests/fixture/docusaurus.config.ts) as a template for your own site.
+
+```bash
+git clone https://github.com/diagrammo/docusaurus-plugin-dgmo
+cd docusaurus-plugin-dgmo
+pnpm install && pnpm build
+cd tests/fixture && pnpm install --no-frozen-lockfile && pnpm exec docusaurus start
+```
+
+Opens at http://localhost:3000 with four example diagrams (plain auto, colored tag sequence, showcase mode, per-block override). See [`tests/fixture/README.md`](./tests/fixture/README.md) for details.
+
 ## Custom color-mode selector
 
 The shipped `remark-dgmo/client.css` keys on `[data-theme="dark"]` — the convention Docusaurus uses. For sites with a custom toggle that signals dark mode via `.dark` or some other selector, see the "Custom color-mode selector" section in the `remark-dgmo` README.

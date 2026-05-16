@@ -1,6 +1,6 @@
 {
   "name": "docusaurus-plugin-dgmo",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Docusaurus plugin to render DGMO diagrams from fenced code blocks at build time. Thin wrapper around remark-dgmo that handles client-module registration.",
   "license": "MIT",
   "repository": {
