@@ -60,11 +60,31 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # tests/fixture/ build is currently blocked by a Docusaurus 3.10.1
-      # SSG bug on Node 22/24 (`TypeError: require.resolveWeak is not a
-      # function` in the server bundle). Webpack compile succeeds; the
-      # error is in Docusaurus's runtime, not in this plugin. Re-enable
-      # once Docusaurus ships a fix.
+      # tests/fixture/ build is currently blocked by two cascading
+      # Docusaurus 3.10.1 SSG bugs (both reproduce on Node 22/24/25):
+      #
+      # 1. `@docusaurus/core/lib/ssg/ssgNodeRequire.js` builds a fake
+      #    `require()` for the eval'd server bundle and forwards
+      #    `.resolve`, `.cache`, `.extensions`, `.main` — but NOT
+      #    `.resolveWeak`. Docusaurus's auto-generated `registry.js`
+      #    (codegenRoutes.js:202) calls `require.resolveWeak("...")`
+      #    at module-eval time, so the bundle aborts with
+      #    `TypeError: require.resolveWeak is not a function`. A
+      #    1-line shim — `ssgRequireFunction.resolveWeak = (id) => id;`
+      #    — advances past this; the return value is only used as a
+      #    registry key, so any identity-like impl is fine.
+      #
+      # 2. After fixing (1) locally we hit a second bug: the server
+      #    bundle eagerly `require()`s raw CSS files
+      #    (e.g. infima/dist/css/default/default.css), which Node's
+      #    CJS loader can't parse (`SyntaxError: Unexpected token ':'`
+      #    on `:root`). The server webpack config should null-loader
+      #    those imports; needs deeper config work.
+      #
+      # Webpack/Rspack compile succeed in both cases — the errors live
+      # in Docusaurus's SSG eval runtime, not in this plugin. Re-enable
+      # the steps below once Docusaurus ships a fix or we adopt a
+      # workaround in a custom plugin hook.
       # - name: Fixture build (Webpack)
       #   run: pnpm test:e2e
       # - name: Fixture build (Rspack)
