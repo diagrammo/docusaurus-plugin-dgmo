@@ -12,8 +12,8 @@ importers:
         specifier: ^3.0.0
         version: 3.10.1(@mdx-js/react@3.1.1(@types/react@19.2.14)(react@19.2.6))(esbuild@0.27.7)(postcss@8.5.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)
       remark-dgmo:
-        specifier: file:../remark-dgmo
-        version: file:../remark-dgmo(@diagrammo/dgmo@0.15.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10))
+        specifier: ^0.1.0
+        version: 0.1.0(@diagrammo/dgmo@0.15.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10))
     devDependencies:
       '@diagrammo/dgmo':
         specifier: ^0.15.0
@@ -4840,8 +4840,8 @@ packages:
     resolution: {integrity: sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==}
     engines: {node: '>= 0.10'}
 
-  remark-dgmo@file:../remark-dgmo:
-    resolution: {directory: ../remark-dgmo, type: directory}
+  remark-dgmo@0.1.0:
+    resolution: {integrity: sha512-LAhBPxOhY2fJyylaE76MlvxFqjsFtZUwjzHzGPkCtoca+VlJgtKlqX+vr1ysHn4V7IdNpALgnanpxETQ5w7YsA==}
     engines: {node: '>=20.6'}
     peerDependencies:
       '@diagrammo/dgmo': ^0.15.0
@@ -11431,7 +11431,7 @@ snapshots:
 
   relateurl@0.2.7: {}
 
-  remark-dgmo@file:../remark-dgmo(@diagrammo/dgmo@0.15.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)):
+  remark-dgmo@0.1.0(@diagrammo/dgmo@0.15.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)):
     dependencies:
       '@diagrammo/dgmo': 0.15.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)
       '@lezer/common': 1.5.2
