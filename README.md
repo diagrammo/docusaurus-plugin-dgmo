@@ -28,6 +28,13 @@ export default async function createConfig(): Promise<Config> {
 
   return {
     // …
+
+    // REQUIRED: this plugin emits raw HTML AST nodes. Docusaurus 3 routes
+    // every .md/.mdx file through MDX by default, and MDX rejects raw
+    // nodes with "Cannot handle unknown node `raw`". Force pure-markdown
+    // (CommonMark) parsing for the whole site.
+    markdown: { format: 'md' },
+
     plugins: ['docusaurus-plugin-dgmo'],
     presets: [
       [
@@ -56,11 +63,11 @@ The plugin's `getClientModules()` registers two assets:
 
 ## Use
 
-Drop a fenced block with the language `dgmo` into any `.md` or `.mdx` file in your `docs/`, `blog/`, or `pages/` directory (whichever slots you wired above):
+Drop a fenced block with the language `dgmo` into any `.md` file in your `docs/`, `blog/`, or `pages/` directory (whichever slots you wired above). MDX files aren't supported without an additional `rehype-raw`-style adapter — the `markdown: { format: 'md' }` setting above forces every file through the markdown parser.
 
 ````markdown
 ```dgmo
-chart: sequence
+sequence
 Client -POST /login-> API
 API -validate-> Auth
 Auth -JWT-> API
@@ -74,7 +81,7 @@ Append options to the fence info string. Tokens are space-separated; values may 
 
 ````markdown
 ```dgmo showcase title="Login flow" palette=catppuccin colorMode=light
-chart: sequence
+sequence
 A -> B
 ```
 ````
