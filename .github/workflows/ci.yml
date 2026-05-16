@@ -23,14 +23,18 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Build first: the fixture-config test dynamically imports
+      # tests/fixture/docusaurus.config.ts, which self-imports
+      # `docusaurus-plugin-dgmo/config` via the package's export map
+      # (./dist/config.js). Without dist/, both typecheck and test fail.
+      - name: Build
+        run: pnpm build
+
       - name: Typecheck
         run: pnpm typecheck
 
       - name: Unit tests
         run: pnpm test
-
-      - name: Build
-        run: pnpm build
 
       # tests/fixture/ build is currently blocked by a Docusaurus 3.10.1
       # SSG bug on Node 22/24 (`TypeError: require.resolveWeak is not a
