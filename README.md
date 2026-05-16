@@ -12,7 +12,7 @@ pnpm add docusaurus-plugin-dgmo @diagrammo/dgmo
 
 `@diagrammo/dgmo` is a peer dependency. Node 20.6+. **ESM only.** Your `docusaurus.config.js` must be `.mjs`/`.ts`/`.mts`, or your `package.json` must have `"type": "module"`.
 
-## Configure
+## Quick start
 
 Wrap your `docusaurus.config.ts` with `defineConfig`. The helper injects the remark plugin into your classic preset's docs/blog/pages slots, sets `markdown.format = 'md'` (raw-HTML output is incompatible with MDX), and registers `docusaurus-plugin-dgmo`. Nothing else to wire.
 
@@ -47,14 +47,36 @@ export default defineConfig(
 );
 ```
 
-The plugin's `getClientModules()` registers two assets:
+## Configure (manual)
 
-- `remark-dgmo/client.css` — three rules that hide the wrong-mode SVG based on `[data-theme="dark"]` (Docusaurus's color-mode signal on `<html>`).
-- A small client script (~1.5 KB) that tightens each diagram's `viewBox` to its content bounds and binds showcase-mode copy buttons. The script registers an `onRouteDidUpdate` hook, so it fires on every SPA route change.
+If `defineConfig` doesn't fit (custom preset, deeply dynamic config, you need to inspect the wiring), do it by hand:
+
+```ts
+// docusaurus.config.ts
+import type { Config } from '@docusaurus/types';
+
+export default async function createConfig(): Promise<Config> {
+  const remarkDgmo = (await import('docusaurus-plugin-dgmo/remark')).default;
+  return {
+    // …
+    markdown: { format: 'md' },
+    plugins: ['docusaurus-plugin-dgmo'],
+    presets: [
+      ['classic', {
+        docs:  { remarkPlugins: [remarkDgmo] },
+        blog:  { remarkPlugins: [remarkDgmo] },
+        pages: { remarkPlugins: [remarkDgmo] },
+      }],
+    ],
+  };
+}
+```
+
+The async-function default export is required because `remark-dgmo` is ESM-only and the jiti loader Docusaurus uses to read the config rejects top-level `await` in a sync default export.
 
 ## Use
 
-Drop a fenced block with the language `dgmo` into any `.md` file in your `docs/`, `blog/`, or `pages/` directory (whichever slots you wired above). MDX files aren't supported without an additional `rehype-raw`-style adapter — the `markdown: { format: 'md' }` setting above forces every file through the markdown parser.
+Drop a fenced block with the language `dgmo` into any `.md` file in your `docs/`, `blog/`, or `pages/` directory. MDX files aren't supported without an additional `rehype-raw`-style adapter — the `markdown: { format: 'md' }` setting forces every file through the markdown parser.
 
 ````markdown
 ```dgmo
@@ -81,7 +103,7 @@ See the [`remark-dgmo` README](https://github.com/diagrammo/remark-dgmo) for the
 
 ## Working reference site
 
-[`tests/fixture/`](./tests/fixture/) is a complete minimal Docusaurus 3 site running this plugin. It's the smallest correct configuration we know of, with all the non-obvious gotchas (async-function config export, `markdown: { format: 'md' }`, `future.faster`) called out inline. Copy [`tests/fixture/docusaurus.config.ts`](./tests/fixture/docusaurus.config.ts) as a template for your own site.
+[`tests/fixture/`](./tests/fixture/) is a complete minimal Docusaurus 3 site running this plugin. Copy [`tests/fixture/docusaurus.config.ts`](./tests/fixture/docusaurus.config.ts) as a template for your own site.
 
 ```bash
 git clone https://github.com/diagrammo/docusaurus-plugin-dgmo
@@ -91,6 +113,13 @@ cd tests/fixture && pnpm install --no-frozen-lockfile && pnpm exec docusaurus st
 ```
 
 Opens at http://localhost:3000 with four example diagrams (plain auto, colored tag sequence, showcase mode, per-block override). See [`tests/fixture/README.md`](./tests/fixture/README.md) for details.
+
+## How CSS is delivered
+
+The plugin's `getClientModules()` registers two assets:
+
+- `remark-dgmo/client.css` — three rules that hide the wrong-mode SVG based on `[data-theme="dark"]` (Docusaurus's color-mode signal on `<html>`). Docusaurus emits it as a `<link rel="stylesheet">` in `<head>`.
+- A small client script (~1.5 KB) that tightens each diagram's `viewBox` to its content bounds and binds showcase-mode copy buttons. The script is registered as `onRouteDidUpdate` so it fires on every SPA route change.
 
 ## Custom color-mode selector
 
@@ -104,33 +133,6 @@ The shipped `remark-dgmo/client.css` keys on `[data-theme="dark"]` — the conve
 4. The client script tightens each SVG's `viewBox` after every route change.
 
 All rendering happens at build time. The browser ships only the inline SVG + the small CSS rules.
-
-## Manual setup (advanced)
-
-If `defineConfig` doesn't fit (custom preset, deeply dynamic config, you need to inspect the wiring), do it by hand:
-
-```ts
-// docusaurus.config.ts
-import type { Config } from '@docusaurus/types';
-
-export default async function createConfig(): Promise<Config> {
-  const remarkDgmo = (await import('docusaurus-plugin-dgmo/remark')).default;
-  return {
-    // …
-    markdown: { format: 'md' },
-    plugins: ['docusaurus-plugin-dgmo'],
-    presets: [
-      ['classic', {
-        docs:  { remarkPlugins: [remarkDgmo] },
-        blog:  { remarkPlugins: [remarkDgmo] },
-        pages: { remarkPlugins: [remarkDgmo] },
-      }],
-    ],
-  };
-}
-```
-
-The async-function default export is required because `remark-dgmo` is ESM-only and the jiti loader Docusaurus uses to read the config rejects top-level `await` in a sync default export.
 
 ## License
 
