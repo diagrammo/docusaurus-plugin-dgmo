@@ -20,31 +20,33 @@ Two things go into `docusaurus.config.ts`. The plugin handles asset registration
 // docusaurus.config.ts
 import type { Config } from '@docusaurus/types';
 
-const dgmoRemark = async () =>
-  (await import('docusaurus-plugin-dgmo/remark')).default;
+// Default-export an async function so the config can dynamically import the
+// ESM-only `remark-dgmo` plugin. A sync default export with top-level await
+// fails under the jiti loader Docusaurus uses to read the config.
+export default async function createConfig(): Promise<Config> {
+  const remarkDgmo = (await import('docusaurus-plugin-dgmo/remark')).default;
 
-const config: Config = {
-  // …
-  plugins: ['docusaurus-plugin-dgmo'],
-  presets: [
-    [
-      'classic',
-      {
-        docs: {
-          remarkPlugins: [await dgmoRemark()],
+  return {
+    // …
+    plugins: ['docusaurus-plugin-dgmo'],
+    presets: [
+      [
+        'classic',
+        {
+          docs: {
+            remarkPlugins: [remarkDgmo],
+          },
+          blog: {
+            remarkPlugins: [remarkDgmo],
+          },
+          pages: {
+            remarkPlugins: [remarkDgmo],
+          },
         },
-        blog: {
-          remarkPlugins: [await dgmoRemark()],
-        },
-        pages: {
-          remarkPlugins: [await dgmoRemark()],
-        },
-      },
+      ],
     ],
-  ],
-};
-
-export default config;
+  };
+}
 ```
 
 The plugin's `getClientModules()` registers two assets:
@@ -86,7 +88,7 @@ The shipped `remark-dgmo/client.css` keys on `[data-theme="dark"]` — the conve
 ## How it works
 
 1. The plugin registers `remark-dgmo`'s CSS and a Docusaurus-shaped client wrapper via `getClientModules()`.
-2. You wire `remarkPlugins: [(await import('docusaurus-plugin-dgmo/remark')).default]` into the preset slots you want diagrams in.
+2. You wire `remarkPlugins: [remarkDgmo]` into the preset slots you want diagrams in (with `remarkDgmo` imported via the async-function config pattern above).
 3. At build time, the remark plugin walks the mdast, finds `` ```dgmo `` blocks, calls `render()` from `@diagrammo/dgmo` once per theme under default `colorMode: 'auto'`, and replaces the block with an `html` node carrying the rendered wrappers.
 4. The client script tightens each SVG's `viewBox` after every route change.
 
