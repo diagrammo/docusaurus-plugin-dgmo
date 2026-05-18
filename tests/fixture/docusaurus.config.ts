@@ -18,7 +18,7 @@ export default defineConfig({
   // build twice — once with this off (Webpack) and once with it on (Rspack) —
   // to satisfy AC-DC4. Renamed from `experimental_faster` to `faster` in 3.10.
   future: {
-    faster: process.env.USE_RSPACK === '1',
+    faster: process.env['USE_RSPACK'] === '1',
   },
 
   presets: [

@@ -18,10 +18,10 @@ describe('tests/fixture/docusaurus.config.ts (defineConfig integration)', () => 
 
     const classic = resolved.presets?.[0] as [string, Record<string, any>];
     expect(classic[0]).toBe('classic');
-    expect(classic[1].docs.path).toBe('docs');
-    expect(classic[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
+    expect(classic[1]['docs'].path).toBe('docs');
+    expect(classic[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
     // Disabled slots remain disabled.
-    expect(classic[1].blog).toBe(false);
-    expect(classic[1].pages).toBe(false);
+    expect(classic[1]['blog']).toBe(false);
+    expect(classic[1]['pages']).toBe(false);
   });
 });

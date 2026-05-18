@@ -52,11 +52,11 @@ describe('defineConfig', () => {
       })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].blog.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].pages.remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['blog'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['pages'].remarkPlugins[0]).toBe(remarkDgmo);
     // The user's existing fields are preserved.
-    expect(preset[1].docs.path).toBe('docs');
+    expect(preset[1]['docs'].path).toBe('docs');
   });
 
   it('handles missing slots — creates remarkPlugins entry on empty preset opts', async () => {
@@ -64,9 +64,9 @@ describe('defineConfig', () => {
       base({ presets: [['classic', {}]] })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].blog.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].pages.remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['blog'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['pages'].remarkPlugins[0]).toBe(remarkDgmo);
   });
 
   it('skips slots disabled with `false`', async () => {
@@ -78,9 +78,9 @@ describe('defineConfig', () => {
       })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].blog).toBe(false);
-    expect(preset[1].pages).toBe(false);
+    expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['blog']).toBe(false);
+    expect(preset[1]['pages']).toBe(false);
   });
 
   it('prepends without losing existing remarkPlugins', async () => {
@@ -93,9 +93,9 @@ describe('defineConfig', () => {
       })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].docs.remarkPlugins).toHaveLength(2);
-    expect(preset[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
-    expect(preset[1].docs.remarkPlugins[1]).toBe(otherPlugin);
+    expect(preset[1]['docs'].remarkPlugins).toHaveLength(2);
+    expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['docs'].remarkPlugins[1]).toBe(otherPlugin);
   });
 
   it('does not duplicate remark-dgmo when re-run on the same config', async () => {
@@ -105,7 +105,7 @@ describe('defineConfig', () => {
     const twice = await defineConfig(once);
     const preset = twice.presets?.[0] as [string, Record<string, any>];
     expect(
-      preset[1].docs.remarkPlugins.filter((p: unknown) => p === remarkDgmo)
+      preset[1]['docs'].remarkPlugins.filter((p: unknown) => p === remarkDgmo)
     ).toHaveLength(1);
     expect(
       twice.plugins?.filter(p => p === 'docusaurus-plugin-dgmo')
@@ -117,8 +117,8 @@ describe('defineConfig', () => {
       base({ presets: [['some-other-preset', { foo: 'bar' }]] as any })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].foo).toBe('bar');
-    expect(preset[1].docs).toBeUndefined();
+    expect(preset[1]['foo']).toBe('bar');
+    expect(preset[1]['docs']).toBeUndefined();
   });
 
   it('handles the @docusaurus/preset-classic alias', async () => {
@@ -128,7 +128,7 @@ describe('defineConfig', () => {
       })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    expect(preset[1].docs.remarkPlugins[0]).toBe(remarkDgmo);
+    expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
   });
 
   it('injects into standalone @docusaurus/plugin-content-docs entries', async () => {
@@ -149,7 +149,7 @@ describe('defineConfig', () => {
       dgmo: { palette: 'catppuccin' },
     });
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    const entry = preset[1].docs.remarkPlugins[0];
+    const entry = preset[1]['docs'].remarkPlugins[0];
     // Tuple form: [plugin, options]
     expect(Array.isArray(entry)).toBe(true);
     expect(entry[0]).toBe(remarkDgmo);
@@ -163,7 +163,7 @@ describe('defineConfig', () => {
     );
     expect(out.markdown?.format).toBeUndefined();
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    const entry = preset[1].docs.remarkPlugins[0];
+    const entry = preset[1]['docs'].remarkPlugins[0];
     expect(Array.isArray(entry)).toBe(true);
     expect(entry[0]).toBe(remarkDgmo);
     expect(entry[1]).toEqual({ mdx: true });
@@ -175,7 +175,7 @@ describe('defineConfig', () => {
       { mdx: true, dgmo: { palette: 'catppuccin' } }
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
-    const entry = preset[1].docs.remarkPlugins[0];
+    const entry = preset[1]['docs'].remarkPlugins[0];
     expect(entry[1]).toEqual({ palette: 'catppuccin', mdx: true });
   });
 });

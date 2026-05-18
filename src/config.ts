@@ -94,7 +94,7 @@ export async function defineConfig(
   // survive (MDX rejects them with `Cannot handle unknown node "raw"`).
   if (!options.skipMarkdownFormat && !options.mdx) {
     const markdown = (config.markdown ?? {}) as Record<string, unknown>;
-    if (markdown.format === undefined) markdown.format = 'md';
+    if (markdown['format'] === undefined) markdown['format'] = 'md';
     config.markdown = markdown as Config['markdown'];
   }
 
