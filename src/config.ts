@@ -35,10 +35,7 @@ export interface DefineConfigOptions {
 }
 
 const PLUGIN_NAME = 'docusaurus-plugin-dgmo';
-const CLASSIC_PRESET_NAMES = new Set([
-  'classic',
-  '@docusaurus/preset-classic',
-]);
+const CLASSIC_PRESET_NAMES = new Set(['classic', '@docusaurus/preset-classic']);
 const CONTENT_PLUGIN_NAMES = new Set([
   '@docusaurus/plugin-content-docs',
   '@docusaurus/plugin-content-blog',
@@ -103,12 +100,12 @@ export async function defineConfig(
   }
 
   if (Array.isArray(config.presets)) {
-    config.presets = config.presets.map(preset =>
+    config.presets = config.presets.map((preset) =>
       preset ? injectIntoPreset(preset as PresetConfig, remarkInstance) : preset
     );
   }
   if (Array.isArray(config.plugins)) {
-    config.plugins = config.plugins.map(plugin =>
+    config.plugins = config.plugins.map((plugin) =>
       plugin
         ? injectIntoStandaloneContentPlugin(
             plugin as PluginConfig,
@@ -133,7 +130,7 @@ function hasPlugin(
   name: string
 ): boolean {
   if (!Array.isArray(plugins)) return false;
-  return plugins.some(p => entryName(p) === name);
+  return plugins.some((p) => entryName(p) === name);
 }
 
 function entryName(entry: unknown): string | null {

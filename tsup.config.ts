@@ -12,5 +12,10 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   target: 'node20',
-  external: ['@diagrammo/dgmo', '@docusaurus/core', '@docusaurus/types', 'remark-dgmo'],
+  external: [
+    '@diagrammo/dgmo',
+    '@docusaurus/core',
+    '@docusaurus/types',
+    'remark-dgmo',
+  ],
 });

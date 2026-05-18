@@ -24,19 +24,23 @@ describe('docusaurus-plugin-dgmo (AC-DC1, AC-DC4)', () => {
       expect(statSync(m).isFile()).toBe(true);
     }
     // One should be the CSS, one the JS.
-    expect(modules.some(m => m.endsWith('.css'))).toBe(true);
-    expect(modules.some(m => m.endsWith('.js'))).toBe(true);
+    expect(modules.some((m) => m.endsWith('.css'))).toBe(true);
+    expect(modules.some((m) => m.endsWith('.js'))).toBe(true);
   });
 
   it('configureWebpack returns {} for isServer=true', () => {
     const plugin = pluginDgmo(MOCK_CTX);
-    const out = (plugin.configureWebpack as Function)({}, true);
+    const out = (
+      plugin.configureWebpack as (config: unknown, isServer: boolean) => unknown
+    )({}, true);
     expect(out).toEqual({});
   });
 
   it('configureWebpack returns jsdom-fallback config for isServer=false', () => {
     const plugin = pluginDgmo(MOCK_CTX);
-    const out = (plugin.configureWebpack as Function)({}, false);
+    const out = (
+      plugin.configureWebpack as (config: unknown, isServer: boolean) => unknown
+    )({}, false);
     expect(out).toEqual({
       resolve: { fallback: { jsdom: false, fs: false, canvas: false } },
     });

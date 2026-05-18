@@ -7,7 +7,6 @@ A minimal Docusaurus 3.10 site wired with `docusaurus-plugin-dgmo` and
    your own Docusaurus site, [`docusaurus.config.ts`](./docusaurus.config.ts)
    is the smallest working configuration. The settings here cover three
    non-obvious gotchas that bit us during the v0.1 smoke test:
-
    - **Async-function default export.** `docusaurus-plugin-dgmo/remark`
      is ESM-only. A sync default export with top-level `await` fails
      under the jiti loader Docusaurus uses to read the config; an async
@@ -22,7 +21,6 @@ A minimal Docusaurus 3.10 site wired with `docusaurus-plugin-dgmo` and
 
 2. **Test fixture for plugin development.** [`docs/diagrams.md`](./docs/diagrams.md)
    exercises four shapes:
-
    - Plain block under `colorMode: 'auto'` — dual-render with the
      navbar toggle swapping between the two SVGs
    - Colored sequence diagram with `tag` blocks — exercises palette
@@ -56,11 +54,11 @@ cascading bugs on Node 22/24/25:
    `.cache`, `.extensions`, `.main` — but not `.resolveWeak`. The
    auto-generated `registry.js` calls `require.resolveWeak(...)` at
    module-eval time and aborts with `TypeError: require.resolveWeak is
-   not a function`.
+not a function`.
 2. After fixing (1) locally we hit a second bug: the server bundle
    eagerly `require()`s raw CSS files (e.g. `infima/.../default.css`),
    which Node's CJS loader can't parse (`SyntaxError: Unexpected token
-   ':'` on `:root`). The server webpack config should null-loader
+':'` on `:root`). The server webpack config should null-loader
    those imports.
 
 Webpack/Rspack compile succeed in both cases. The errors live in

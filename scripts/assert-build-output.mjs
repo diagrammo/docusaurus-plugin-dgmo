@@ -16,7 +16,13 @@
 //
 // Exit codes: 0 on pass, 1 on any failure.
 
-import { readFileSync, statSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
+import {
+  readFileSync,
+  statSync,
+  readdirSync,
+  writeFileSync,
+  existsSync,
+} from 'node:fs';
 import { join, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
@@ -38,11 +44,17 @@ const html = readFileSync(HTML_PATH, 'utf8');
 
 if (!/\bdgmo-light\b/.test(html)) fail('built HTML missing dgmo-light wrapper');
 if (!/\bdgmo-dark\b/.test(html)) fail('built HTML missing dgmo-dark wrapper');
-if (!/<link rel="stylesheet"[^>]*href="[^"]*remark-dgmo[^"]*client[^"]*\.css"/.test(html)) {
+if (
+  !/<link rel="stylesheet"[^>]*href="[^"]*remark-dgmo[^"]*client[^"]*\.css"/.test(
+    html
+  )
+) {
   fail('built HTML missing remark-dgmo client.css <link> in <head>');
 }
 
-console.log('✓ HTML contains dgmo-light, dgmo-dark, and remark-dgmo/client.css <link>');
+console.log(
+  '✓ HTML contains dgmo-light, dgmo-dark, and remark-dgmo/client.css <link>'
+);
 
 // Find page-specific JS chunks. Docusaurus emits per-route chunks named
 // `<hash>.<route>.<hash>.js` — we identify them by reading the index.html
@@ -50,19 +62,25 @@ console.log('✓ HTML contains dgmo-light, dgmo-dark, and remark-dgmo/client.css
 // total size of chunks referenced from this page's HTML.
 if (!existsSync(ASSETS)) fail(`Built JS asset dir missing: ${ASSETS}`);
 
-const allChunks = readdirSync(ASSETS).filter(f => f.endsWith('.js'));
-const referenced = allChunks.filter(f => html.includes(`/assets/js/${f}`));
+const allChunks = readdirSync(ASSETS).filter((f) => f.endsWith('.js'));
+const referenced = allChunks.filter((f) => html.includes(`/assets/js/${f}`));
 
 if (referenced.length === 0) {
-  console.warn(`::warning::no per-page JS chunks referenced from the diagrams page; sentinel/byte checks skipped`);
+  console.warn(
+    `::warning::no per-page JS chunks referenced from the diagrams page; sentinel/byte checks skipped`
+  );
 } else {
   for (const chunk of referenced) {
     const body = readFileSync(join(ASSETS, chunk), 'utf8');
     if (body.includes(JSDOM_SENTINEL)) {
-      fail(`jsdom sentinel "${JSDOM_SENTINEL}" found in ${chunk} — jsdom leaked into client bundle`);
+      fail(
+        `jsdom sentinel "${JSDOM_SENTINEL}" found in ${chunk} — jsdom leaked into client bundle`
+      );
     }
   }
-  console.log(`✓ ${referenced.length} per-page JS chunks free of jsdom sentinel`);
+  console.log(
+    `✓ ${referenced.length} per-page JS chunks free of jsdom sentinel`
+  );
 
   const totalGzipped = referenced.reduce(
     (acc, chunk) => acc + gzipSync(readFileSync(join(ASSETS, chunk))).length,
@@ -71,9 +89,18 @@ if (referenced.length === 0) {
   if (!existsSync(BASELINE)) {
     writeFileSync(
       BASELINE,
-      JSON.stringify({ totalGzippedBytes: totalGzipped, capturedAt: new Date().toISOString() }, null, 2)
+      JSON.stringify(
+        {
+          totalGzippedBytes: totalGzipped,
+          capturedAt: new Date().toISOString(),
+        },
+        null,
+        2
+      )
     );
-    console.log(`✓ Baseline seeded at ${totalGzipped} bytes (gzipped). Commit ${BASELINE} to enable regression checks.`);
+    console.log(
+      `✓ Baseline seeded at ${totalGzipped} bytes (gzipped). Commit ${BASELINE} to enable regression checks.`
+    );
   } else {
     const prev = JSON.parse(readFileSync(BASELINE, 'utf8')).totalGzippedBytes;
     const delta = totalGzipped - prev;
@@ -82,7 +109,9 @@ if (referenced.length === 0) {
         `bundle-size delta ${delta} bytes exceeds ${BUDGET_BYTES} budget (baseline ${prev}, current ${totalGzipped})`
       );
     }
-    console.log(`✓ Bundle size ${totalGzipped} (Δ${delta} bytes) within ±${BUDGET_BYTES}`);
+    console.log(
+      `✓ Bundle size ${totalGzipped} (Δ${delta} bytes) within ±${BUDGET_BYTES}`
+    );
   }
 }
 

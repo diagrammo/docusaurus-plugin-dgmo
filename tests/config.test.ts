@@ -60,9 +60,7 @@ describe('defineConfig', () => {
   });
 
   it('handles missing slots — creates remarkPlugins entry on empty preset opts', async () => {
-    const out = await defineConfig(
-      base({ presets: [['classic', {}]] })
-    );
+    const out = await defineConfig(base({ presets: [['classic', {}]] }));
     const preset = out.presets?.[0] as [string, Record<string, any>];
     expect(preset[1]['docs'].remarkPlugins[0]).toBe(remarkDgmo);
     expect(preset[1]['blog'].remarkPlugins[0]).toBe(remarkDgmo);
@@ -87,9 +85,7 @@ describe('defineConfig', () => {
     const otherPlugin = () => () => {};
     const out = await defineConfig(
       base({
-        presets: [
-          ['classic', { docs: { remarkPlugins: [otherPlugin] } }],
-        ],
+        presets: [['classic', { docs: { remarkPlugins: [otherPlugin] } }]],
       })
     );
     const preset = out.presets?.[0] as [string, Record<string, any>];
@@ -108,7 +104,7 @@ describe('defineConfig', () => {
       preset[1]['docs'].remarkPlugins.filter((p: unknown) => p === remarkDgmo)
     ).toHaveLength(1);
     expect(
-      twice.plugins?.filter(p => p === 'docusaurus-plugin-dgmo')
+      twice.plugins?.filter((p) => p === 'docusaurus-plugin-dgmo')
     ).toHaveLength(1);
   });
 
@@ -138,16 +134,19 @@ describe('defineConfig', () => {
       })
     );
     const docsPlugin = out.plugins?.find(
-      p => Array.isArray(p) && p[0] === '@docusaurus/plugin-content-docs'
+      (p) => Array.isArray(p) && p[0] === '@docusaurus/plugin-content-docs'
     ) as [string, any];
     expect(docsPlugin[1].id).toBe('extra');
     expect(docsPlugin[1].remarkPlugins[0]).toBe(remarkDgmo);
   });
 
   it('forwards dgmo options to the remark plugin', async () => {
-    const out = await defineConfig(base({ presets: [['classic', { docs: {} }]] }), {
-      dgmo: { palette: 'catppuccin' },
-    });
+    const out = await defineConfig(
+      base({ presets: [['classic', { docs: {} }]] }),
+      {
+        dgmo: { palette: 'catppuccin' },
+      }
+    );
     const preset = out.presets?.[0] as [string, Record<string, any>];
     const entry = preset[1]['docs'].remarkPlugins[0];
     // Tuple form: [plugin, options]

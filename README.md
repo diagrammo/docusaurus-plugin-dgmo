@@ -1,6 +1,6 @@
 # docusaurus-plugin-dgmo
 
-Render [DGMO](https://diagrammo.app) diagrams from `` ```dgmo `` fenced code blocks in your Docusaurus site at build time. Powered by [`@diagrammo/dgmo`](https://www.npmjs.com/package/@diagrammo/dgmo) and the framework-agnostic [`remark-dgmo`](https://www.npmjs.com/package/remark-dgmo) core. Zero client JavaScript by default.
+Render [DGMO](https://diagrammo.app) diagrams from ` ```dgmo ` fenced code blocks in your Docusaurus site at build time. Powered by [`@diagrammo/dgmo`](https://www.npmjs.com/package/@diagrammo/dgmo) and the framework-agnostic [`remark-dgmo`](https://www.npmjs.com/package/remark-dgmo) core. Zero client JavaScript by default.
 
 Every diagram is rendered twice at build time (light + dark palettes) and follows the Docusaurus color-mode toggle via shipped CSS.
 
@@ -42,7 +42,9 @@ Pass remark-dgmo options as a second argument:
 
 ```ts
 export default defineConfig(
-  { /* …config… */ },
+  {
+    /* …config… */
+  },
   { dgmo: { palette: 'catppuccin', colorMode: 'auto' } }
 );
 ```
@@ -53,7 +55,9 @@ By default `defineConfig` sets `markdown.format = 'md'` because the rendered dia
 
 ```ts
 export default defineConfig(
-  { /* …config… */ },
+  {
+    /* …config… */
+  },
   { mdx: true }
 );
 ```
@@ -75,11 +79,14 @@ export default async function createConfig(): Promise<Config> {
     markdown: { format: 'md' },
     plugins: ['docusaurus-plugin-dgmo'],
     presets: [
-      ['classic', {
-        docs:  { remarkPlugins: [remarkDgmo] },
-        blog:  { remarkPlugins: [remarkDgmo] },
-        pages: { remarkPlugins: [remarkDgmo] },
-      }],
+      [
+        'classic',
+        {
+          docs: { remarkPlugins: [remarkDgmo] },
+          blog: { remarkPlugins: [remarkDgmo] },
+          pages: { remarkPlugins: [remarkDgmo] },
+        },
+      ],
     ],
   };
 }
@@ -142,7 +149,7 @@ The shipped `remark-dgmo/client.css` keys on `[data-theme="dark"]` — the conve
 
 1. `defineConfig` is an async helper that dynamically imports the ESM-only `remark-dgmo` plugin, then injects it into every `docs` / `blog` / `pages` slot in your classic preset (or any standalone `@docusaurus/plugin-content-*` entry), sets `markdown.format = 'md'`, and adds `'docusaurus-plugin-dgmo'` to `plugins[]`.
 2. The plugin itself registers `remark-dgmo`'s CSS and a Docusaurus-shaped client wrapper via `getClientModules()`.
-3. At build time, the remark plugin walks the mdast, finds `` ```dgmo `` blocks, calls `render()` from `@diagrammo/dgmo` once per theme under default `colorMode: 'auto'`, and replaces the block with an `html` node carrying the rendered wrappers.
+3. At build time, the remark plugin walks the mdast, finds ` ```dgmo ` blocks, calls `render()` from `@diagrammo/dgmo` once per theme under default `colorMode: 'auto'`, and replaces the block with an `html` node carrying the rendered wrappers.
 4. The client script tightens each SVG's `viewBox` after every route change.
 
 All rendering happens at build time. The browser ships only the inline SVG + the small CSS rules.
