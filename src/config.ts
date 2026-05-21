@@ -92,7 +92,7 @@ export async function defineConfig(
   if (!options.skipMarkdownFormat && !options.mdx) {
     const markdown = (config.markdown ?? {}) as Record<string, unknown>;
     if (markdown['format'] === undefined) markdown['format'] = 'md';
-    config.markdown = markdown as Config['markdown'];
+    config.markdown = markdown as NonNullable<Config['markdown']>;
   }
 
   if (!hasPlugin(config.plugins, PLUGIN_NAME)) {

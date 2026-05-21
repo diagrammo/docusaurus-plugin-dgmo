@@ -26,7 +26,7 @@ describe('defineConfig', () => {
 
   it('respects an explicit markdown.format', async () => {
     const out = await defineConfig(
-      base({ markdown: { format: 'mdx' } as Config['markdown'] })
+      base({ markdown: { format: 'mdx' } as NonNullable<Config['markdown']> })
     );
     expect(out.markdown?.format).toBe('mdx');
   });
