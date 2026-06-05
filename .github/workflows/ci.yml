@@ -50,12 +50,17 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
-      # tests/fixture/ build is currently blocked by a Docusaurus 3.10.1
-      # SSG bug on Node 22/24 (`TypeError: require.resolveWeak is not a
-      # function` in the server bundle). Webpack compile succeeds; the
-      # error is in Docusaurus's runtime, not in this plugin. Re-enable
-      # once Docusaurus ships a fix.
-      # - name: Fixture build (Webpack)
-      #   run: pnpm test:e2e
+      # The `require.resolveWeak is not a function` SSG failure was NOT a
+      # Docusaurus bug — it was `"type": "module"` in the fixture package.json:
+      # Docusaurus's eval-based SSG can't supply webpack's require.resolveWeak
+      # to a server bundle evaluated in an ESM package context. Removing
+      # `type: module` (the fixture is CJS; the .ts config loads via jiti
+      # regardless) fixes it. The companion localStorage/requestAnimationFrame
+      # crashes were dgmo leaking jsdom globals (fixed in @diagrammo/dgmo
+      # 0.25.5). Webpack path re-enabled below.
+      - name: Fixture build (Webpack)
+        run: pnpm test:e2e
+      # Rspack path (AC-DC4) stays disabled: it needs @docusaurus/faster +
+      # `future.experimental_faster.ssgWorkerThreads` wiring not present here.
       # - name: Fixture build (Rspack)
       #   run: pnpm test:e2e:rspack

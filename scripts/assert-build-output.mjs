@@ -44,16 +44,33 @@ const html = readFileSync(HTML_PATH, 'utf8');
 
 if (!/\bdgmo-light\b/.test(html)) fail('built HTML missing dgmo-light wrapper');
 if (!/\bdgmo-dark\b/.test(html)) fail('built HTML missing dgmo-dark wrapper');
-if (
-  !/<link rel="stylesheet"[^>]*href="[^"]*remark-dgmo[^"]*client[^"]*\.css"/.test(
-    html
-  )
-) {
-  fail('built HTML missing remark-dgmo client.css <link> in <head>');
+
+// Docusaurus bundles every client module's CSS (including remark-dgmo's
+// client.css, registered via getClientModules) into its combined
+// `assets/css/styles.<hash>.css` — it does NOT emit a standalone
+// remark-dgmo-client.css <link>. So verify the load-bearing dual-render rule
+// (`.dgmo-dark, [data-theme=dark] .dgmo-light { display: none }`) made it into
+// whichever stylesheet the page links.
+const cssHrefs = [
+  ...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g),
+].map((m) => m[1]);
+if (cssHrefs.length === 0) fail('built HTML links no stylesheet');
+
+const DUAL_RENDER_RULE =
+  /\.dgmo-dark\s*,\s*\[data-theme=["']?dark["']?\]\s*\.dgmo-light\s*\{[^}]*display\s*:\s*none/;
+const cssHasRule = cssHrefs.some((href) => {
+  const cssPath = resolve(FIXTURE, 'build', href.replace(/^\//, ''));
+  return existsSync(cssPath) && DUAL_RENDER_RULE.test(readFileSync(cssPath, 'utf8'));
+});
+if (!cssHasRule) {
+  fail(
+    'no linked stylesheet contains remark-dgmo/client.css dual-render rules — ' +
+      'did getClientModules stop registering remark-dgmo/client.css?'
+  );
 }
 
 console.log(
-  '✓ HTML contains dgmo-light, dgmo-dark, and remark-dgmo/client.css <link>'
+  '✓ HTML contains dgmo-light, dgmo-dark, and the bundled stylesheet carries remark-dgmo/client.css rules'
 );
 
 // Find page-specific JS chunks. Docusaurus emits per-route chunks named
