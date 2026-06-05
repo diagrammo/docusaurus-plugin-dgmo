@@ -1,0 +1,22 @@
+{
+  "name": "docusaurus-dgmo-showcase",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Standalone Docusaurus site that renders every dgmo chart type, deployed to GitHub Pages. NOT the test fixture — a clean minimal project that consumes the published packages, because the eval-based Docusaurus SSG is sensitive to the test fixture's dependency tree.",
+  "scripts": {
+    "build": "docusaurus build",
+    "start": "docusaurus start"
+  },
+  "dependencies": {
+    "@diagrammo/dgmo": "^0.25.5",
+    "@docusaurus/core": "3.10.1",
+    "@docusaurus/preset-classic": "3.10.1",
+    "@mdx-js/react": "^3.0.0",
+    "docusaurus-plugin-dgmo": "^0.4.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=20.6"
+  }
+}
