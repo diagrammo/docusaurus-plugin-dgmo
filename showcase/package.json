@@ -13,6 +13,7 @@
     "@docusaurus/preset-classic": "3.10.1",
     "@mdx-js/react": "^3.0.0",
     "docusaurus-plugin-dgmo": "^0.4.4",
+    "remark-dgmo": "^0.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

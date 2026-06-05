@@ -1,0 +1,22 @@
+/* Nord page theme for the Docusaurus showcase.
+ *
+ * The palette + generic --dgmo-* tokens + dark logic live in the shared
+ * remark-dgmo/theme-nord.css (one source for all three framework showcases).
+ * Here we only alias Docusaurus's Infima variables to those tokens so the
+ * navbar, sidebar, links, and content surfaces follow Nord light/dark. Infima's
+ * own dark block is keyed on [data-theme=dark] — the same selector theme-nord
+ * uses — so flipping the toggle remaps everything in one step. */
+@import 'remark-dgmo/theme-nord.css';
+
+:root {
+  --ifm-background-color: var(--dgmo-bg);
+  --ifm-background-surface-color: var(--dgmo-surface);
+  --ifm-font-color-base: var(--dgmo-fg);
+  --ifm-color-content-secondary: var(--dgmo-muted);
+  --ifm-color-primary: var(--dgmo-accent);
+  --ifm-link-color: var(--dgmo-accent);
+  --ifm-navbar-background-color: var(--dgmo-surface);
+  --ifm-navbar-link-color: var(--dgmo-fg);
+  --ifm-toc-border-color: var(--dgmo-border);
+  --ifm-hr-border-color: var(--dgmo-border);
+}

@@ -18,6 +18,9 @@ module.exports = defineConfig({
         docs: { routeBasePath: '/', sidebarPath: undefined },
         blog: false,
         pages: false,
+        // Shared Nord page theme: imports remark-dgmo/theme-nord.css and aliases
+        // Infima's variables to its --dgmo-* tokens (see src/css/custom.css).
+        theme: { customCss: './src/css/custom.css' },
       },
     ],
   ],
