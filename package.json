@@ -73,14 +73,14 @@
     "prepublishOnly": "pnpm build && pnpm test"
   },
   "peerDependencies": {
-    "@diagrammo/dgmo": "^0.28.0",
+    "@diagrammo/dgmo": "^0.29.0",
     "@docusaurus/core": "^3.0.0"
   },
   "dependencies": {
-    "remark-dgmo": "^0.3.7"
+    "remark-dgmo": "^0.3.8"
   },
   "devDependencies": {
-    "@diagrammo/dgmo": "^0.28.0",
+    "@diagrammo/dgmo": "^0.29.0",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.0",
