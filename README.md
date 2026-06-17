@@ -4,6 +4,12 @@ Render [DGMO](https://diagrammo.app) diagrams from ` ```dgmo ` fenced code block
 
 Every diagram is rendered twice at build time (light + dark palettes) and follows the Docusaurus color-mode toggle via shipped CSS.
 
+<p align="center">
+  <a href="https://diagrammo.app"><img src="https://diagrammo.app/readme/sequence.gif" alt="A DGMO diagram authored as plain text" width="100%"></a>
+  <br>
+  <em>Write a fenced <code>dgmo</code> block — it renders to SVG at build time.</em>
+</p>
+
 ## Install
 
 ```bash
