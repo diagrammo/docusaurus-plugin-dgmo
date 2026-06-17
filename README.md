@@ -2,6 +2,8 @@
 
 Render [DGMO](https://diagrammo.app) diagrams from ` ```dgmo ` fenced code blocks in your Docusaurus site at build time. Powered by [`@diagrammo/dgmo`](https://www.npmjs.com/package/@diagrammo/dgmo) and the framework-agnostic [`remark-dgmo`](https://www.npmjs.com/package/remark-dgmo) core. Zero client JavaScript by default.
 
+📖 **Setup guide:** [diagrammo.app/embed#docusaurus](https://diagrammo.app/embed#docusaurus) · 🔭 **Live showcase:** [every chart type rendered through docusaurus-plugin-dgmo](https://diagrammo.github.io/docusaurus-plugin-dgmo/)
+
 Every diagram is rendered twice at build time (light + dark palettes) and follows the Docusaurus color-mode toggle via shipped CSS.
 
 <p align="center">
