@@ -48,19 +48,25 @@ if (!/\bdgmo-dark\b/.test(html)) fail('built HTML missing dgmo-dark wrapper');
 // Docusaurus bundles every client module's CSS (including remark-dgmo's
 // client.css, registered via getClientModules) into its combined
 // `assets/css/styles.<hash>.css` — it does NOT emit a standalone
-// remark-dgmo-client.css <link>. So verify the load-bearing dual-render rule
-// (`.dgmo-dark, [data-theme=dark] .dgmo-light { display: none }`) made it into
-// whichever stylesheet the page links.
+// remark-dgmo-client.css <link>. So verify the load-bearing dual-render rules
+// (`.dgmo-dark { display: none }` + `[data-theme=dark] .dgmo-light
+// { display: none }`, remark-dgmo >= 0.5.0 standard embed chrome — may be
+// merged into one selector list by the CSS minifier) made it into whichever
+// stylesheet the page links.
 const cssHrefs = [
   ...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+\.css)"/g),
 ].map((m) => m[1]);
 if (cssHrefs.length === 0) fail('built HTML links no stylesheet');
 
-const DUAL_RENDER_RULE =
-  /\.dgmo-dark\s*,\s*\[data-theme=["']?dark["']?\]\s*\.dgmo-light\s*\{[^}]*display\s*:\s*none/;
+const DUAL_RENDER_RULES = [
+  /\.dgmo-dark[^{}]*\{[^}]*display\s*:\s*none/,
+  /\[data-theme=["']?dark["']?\]\s*\.dgmo-light[^{}]*\{[^}]*display\s*:\s*none/,
+];
 const cssHasRule = cssHrefs.some((href) => {
   const cssPath = resolve(FIXTURE, 'build', href.replace(/^\//, ''));
-  return existsSync(cssPath) && DUAL_RENDER_RULE.test(readFileSync(cssPath, 'utf8'));
+  if (!existsSync(cssPath)) return false;
+  const css = readFileSync(cssPath, 'utf8');
+  return DUAL_RENDER_RULES.every((rule) => rule.test(css));
 });
 if (!cssHasRule) {
   fail(
