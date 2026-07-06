@@ -36,7 +36,10 @@ jobs:
       - name: Pull showcase content (all chart types from dgmo-content)
         run: |
           printf -- '---\nslug: /\ntitle: All chart types\n---\n' > showcase/docs/intro.md
-          curl -fsSL https://raw.githubusercontent.com/diagrammo/dgmo-content/main/examples/all-chart-types.md | sed '1d' >> showcase/docs/intro.md
+          # sed: drop the H1 (line 1), then force every bare ```dgmo fence into
+          # showcase mode so the deployed gallery demonstrates the hover-reveal
+          # footer (source + copy + open-in-editor). Diagram mode ships no footer.
+          curl -fsSL https://raw.githubusercontent.com/diagrammo/dgmo-content/main/examples/all-chart-types.md | sed -e '1d' -e 's/^```dgmo$/```dgmo showcase/' >> showcase/docs/intro.md
 
       - name: Install showcase deps (latest published dgmo + plugin)
         run: cd showcase && pnpm install --no-frozen-lockfile
