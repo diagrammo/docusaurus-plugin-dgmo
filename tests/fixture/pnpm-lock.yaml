@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@diagrammo/dgmo':
-        specifier: ^0.47.0
-        version: 0.47.0
+        specifier: ^0.48.1
+        version: 0.48.1
       '@docusaurus/core':
         specifier: ^3.10.1
         version: 3.10.1(@mdx-js/react@3.1.1(@types/react@19.2.16)(react@19.2.7))(postcss@8.5.15)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1056,8 +1056,8 @@ packages:
   '@dagrejs/graphlib@4.0.1':
     resolution: {integrity: sha512-IvcV6FduIIAmLwnH+yun+QtV36SC7mERqa86aClNqmMN09WhmPPYU8ckHrZBozErf+UvHPWOTJYaGYiIcs0DgA==}
 
-  '@diagrammo/dgmo@0.47.0':
-    resolution: {integrity: sha512-0bK1TcFy2KfCuUwNds1haVlx4qkECibsBxkPzX68tVid0KHGinLedRpXIjaMcGRyf47v/GnPELRUeRFrwalH9A==}
+  '@diagrammo/dgmo@0.48.1':
+    resolution: {integrity: sha512-WnvGgm5lhFuBEWldoxEaybMCSNmV3TKdQx8oo2ik4sg+lSMMZoY1bN3FAftRbkgiMFMWVxsCD/ObLZbtieV1FA==}
     engines: {node: '>=20.6'}
     hasBin: true
     peerDependencies:
@@ -6640,7 +6640,7 @@ snapshots:
 
   '@dagrejs/graphlib@4.0.1': {}
 
-  '@diagrammo/dgmo@0.47.0':
+  '@diagrammo/dgmo@0.48.1':
     dependencies:
       '@dagrejs/dagre': 3.0.0
       '@resvg/resvg-js': 2.6.2
