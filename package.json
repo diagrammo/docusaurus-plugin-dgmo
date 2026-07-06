@@ -80,7 +80,7 @@
     "remark-dgmo": "^0.5.1"
   },
   "devDependencies": {
-    "@diagrammo/dgmo": "^0.47.0",
+    "@diagrammo/dgmo": "^0.48.1",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.0",
