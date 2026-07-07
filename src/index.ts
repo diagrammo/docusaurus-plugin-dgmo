@@ -44,6 +44,11 @@ export default function pluginDgmo(
         // module graph so the paths land at the actual on-disk locations
         // inside node_modules/.
         require.resolve('remark-dgmo/client.css'),
+        // Neutralizes the chrome Docusaurus's MDXComponents mapping paints
+        // onto the raw <details>/<pre> of the source panel in
+        // `markdown.format: 'md'` mode (alert box, summary arrow,
+        // unwrapped <pre>). No-ops in mdx mode.
+        require.resolve('docusaurus-plugin-dgmo/styles/docusaurus.css'),
         // The Docusaurus-aware client wrapper lives in THIS package so we
         // don't leak Docusaurus's `onRouteDidUpdate` symbol into the
         // framework-agnostic remark-dgmo core.

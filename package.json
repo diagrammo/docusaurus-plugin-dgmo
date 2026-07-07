@@ -42,7 +42,8 @@
       "import": "./dist/config.js",
       "default": "./dist/config.js"
     },
-    "./client": "./dist/docusaurus-client.js"
+    "./client": "./dist/docusaurus-client.js",
+    "./styles/docusaurus.css": "./dist/docusaurus.css"
   },
   "files": [
     "dist",
@@ -54,7 +55,8 @@
     "node": ">=20.6"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp styles/docusaurus.css dist/docusaurus.css",
+    "postbuild": "test -f dist/docusaurus.css",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "pretest": "pnpm build",

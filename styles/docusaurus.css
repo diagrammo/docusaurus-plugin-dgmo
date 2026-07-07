@@ -1,0 +1,53 @@
+/* Undo Docusaurus theme chrome on the dgmo standard block's source panel.
+ *
+ * In `markdown.format: 'md'` mode (this plugin's default) Docusaurus maps
+ * every raw HTML tag through its MDXComponents:
+ *
+ *   - <details> becomes the theme Details component — Infima
+ *     `alert alert--info` box, CSS-arrow on the summary, and a bordered
+ *     `.collapsibleContent_*` wrapper around the panel body.
+ *   - <pre> is unwrapped entirely (MDXPre renders children only), dropping
+ *     `.dgmo-pre` and its `white-space: pre` — the source would reflow as
+ *     prose.
+ *
+ * Neither mapping can be prevented from a plugin, so this stylesheet
+ * neutralizes the injected chrome instead. Rules key on stable Infima/dgmo
+ * class names; the hashed CSS-module class is matched by [class*=...] where
+ * unavoidable. Everything is scoped so it no-ops in `mdx: true` mode, where
+ * blocks ship via dangerouslySetInnerHTML and keep their raw markup.
+ */
+
+details.dgmo-source-wrap.alert {
+  background: none;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+details.dgmo-source-wrap.alert > summary {
+  /* Details adds padding-left: 1rem to make room for its arrow. */
+  padding: 0.15em 0;
+}
+details.dgmo-source-wrap.alert > summary::before {
+  /* The CSS-only disclosure arrow. */
+  display: none;
+}
+details.dgmo-source-wrap.alert [class*='collapsibleContent'] {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+/* MDXPre stripped the <pre class="dgmo-pre"> wrapper, so the .dgmo-code span
+ * sits directly under .dgmo-source-inner and must carry the preformatted
+ * styling itself. The direct-child combinator keeps this off mdx-mode markup
+ * (there the span still sits inside the surviving <pre>). */
+.dgmo-source-inner > .dgmo-code {
+  white-space: pre;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  padding: 1em;
+}
