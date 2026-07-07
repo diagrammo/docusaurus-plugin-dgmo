@@ -15,7 +15,9 @@ module.exports = defineConfig({
     [
       'classic',
       {
-        docs: { routeBasePath: '/', sidebarPath: undefined },
+        // sidebars.js derives anchor links from docs/intro.md's h2/h3
+        // headings at config-load time (single-page site — see sidebars.js).
+        docs: { routeBasePath: '/', sidebarPath: './sidebars.js' },
         blog: false,
         pages: false,
         // Shared Nord page theme: imports remark-dgmo/theme-nord.css and aliases
