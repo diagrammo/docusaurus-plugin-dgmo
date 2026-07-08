@@ -7,6 +7,7 @@ const { defineConfig } = require('docusaurus-plugin-dgmo/config');
 module.exports = defineConfig({
   title: 'Diagrammo × Docusaurus',
   tagline: 'Every dgmo chart type, rendered at build time',
+  favicon: 'favicon.svg',
   url: 'https://diagrammo.github.io',
   baseUrl: process.env.PAGES_BASE || '/',
   onBrokenLinks: 'warn',
