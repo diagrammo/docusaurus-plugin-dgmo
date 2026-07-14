@@ -1,6 +1,6 @@
 {
   "name": "docusaurus-plugin-dgmo",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "Docusaurus plugin to render DGMO diagrams from fenced code blocks at build time. Ships a one-line `defineConfig` wrapper over remark-dgmo and handles client-module registration.",
   "license": "MIT",
   "repository": {
@@ -79,10 +79,10 @@
     "@docusaurus/core": "^3.0.0"
   },
   "dependencies": {
-    "remark-dgmo": "^0.8.0"
+    "remark-dgmo": "^0.9.0"
   },
   "devDependencies": {
-    "@diagrammo/dgmo": ">=0.50.0 <1",
+    "@diagrammo/dgmo": "^0.51.0",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.0",
