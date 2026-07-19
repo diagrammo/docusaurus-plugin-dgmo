@@ -7,10 +7,10 @@
     "start": "docusaurus start"
   },
   "dependencies": {
+    "@diagrammo/dgmo": "^0.53.0",
     "@docusaurus/core": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
     "@mdx-js/react": "^3.0.0",
-    "@diagrammo/dgmo": ">=0.50.0 <1",
     "docusaurus-plugin-dgmo": "link:../..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
