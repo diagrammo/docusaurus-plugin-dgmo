@@ -9,9 +9,10 @@ Shared wrapper contract: [`../remark-dgmo/WRAPPER-CONVENTIONS.md`](../remark-dgm
 
 ## Versions — read `package.json`
 
-- `remark-dgmo` `^0.10.0` (astro-dgmo has moved to `^0.11.0`; this one has not)
-- peers: `@diagrammo/dgmo` `>=0.45.0 <1`, `@docusaurus/core` `^3.0.0`
+- `remark-dgmo` `^0.11.0` (in step with astro-dgmo)
+- peers: `@diagrammo/dgmo` `>=0.57.0 <1`, `@docusaurus/core` `^3.0.0`
 - Caret on a `0.x` dep pins the **minor** — a `remark-dgmo` minor needs an explicit bump here
+- The `@diagrammo/dgmo` peer floor tracks **remark-dgmo's own peer floor**. `remark-dgmo@0.11.0` imports dgmo subpaths (`./cloud-reference`) that first exist in 0.57.0, so a lower floor here would advertise compatibility our own dependency rules out. npm cannot catch that — nothing validates a peer range against your dependencies' peers. Move the `devDependencies` copy in lockstep, or the tests install a dgmo the floor forbids
 
 ## Host specifics
 
