@@ -9,9 +9,10 @@ Shared wrapper contract: [`../remark-dgmo/WRAPPER-CONVENTIONS.md`](../remark-dgm
 
 ## Versions — read `package.json`
 
-- `remark-dgmo` `^0.11.0` (in step with astro-dgmo)
-- peers: `@diagrammo/dgmo` `>=0.57.0 <1`, `@docusaurus/core` `^3.0.0`
+- `remark-dgmo` `^0.12.0` (in step with astro-dgmo)
+- peers: `@diagrammo/dgmo` `>=0.58.0 <1`, `@docusaurus/core` `^3.0.0`
 - Caret on a `0.x` dep pins the **minor** — a `remark-dgmo` minor needs an explicit bump here
+- 🔴 **`showcase/package.json` is a second place that has to move, and it is the one that gets forgotten.** It consumes *published* packages, so it drifted to `remark-dgmo ^0.6.0` / `docusaurus-plugin-dgmo ^0.6.1` while this package sat on 0.12/0.8 — six minors behind, and nothing failed, because a stale showcase still builds. It now pins all three **exactly** (`0.12.0` / `0.8.0` / `0.59.0`) so the next drift shows up in a diff instead of a deployed page quietly demonstrating an old feature set (checked 2026-08-03)
 - The `@diagrammo/dgmo` peer floor tracks **remark-dgmo's own peer floor**. `remark-dgmo@0.11.0` imports dgmo subpaths (`./cloud-reference`) that first exist in 0.57.0, so a lower floor here would advertise compatibility our own dependency rules out. npm cannot catch that — nothing validates a peer range against your dependencies' peers. Move the `devDependencies` copy in lockstep, or the tests install a dgmo the floor forbids
 
 ## Host specifics

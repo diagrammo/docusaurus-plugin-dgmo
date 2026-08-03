@@ -33,13 +33,24 @@ jobs:
         with:
           node-version: 20
 
-      - name: Pull showcase content (all chart types from dgmo-content)
+      - name: Pull showcase content (live links + all chart types from dgmo-content)
         run: |
-          printf -- '---\nslug: /\ntitle: All chart types\n---\n' > showcase/docs/intro.md
+          # pipefail: without it a failed curl exits 0 through sed, and the page
+          # deploys with its gallery silently missing.
+          set -euo pipefail
+          BASE=https://raw.githubusercontent.com/diagrammo/dgmo-content/main/examples
+          printf -- '---\nslug: /\ntitle: Live links and every chart type\n---\n' > showcase/docs/intro.md
+          # The live-link section leads: it is the one thing this integration
+          # does that pasting a picture into a docs folder cannot. NO sed here —
+          # its fences stay in diagram mode, because the whole demonstration is
+          # that the source is not on the page, and a "view source" footer would
+          # undercut it.
+          curl -fsSL "$BASE/docs/live-links.md" >> showcase/docs/intro.md
+          printf '\n' >> showcase/docs/intro.md
           # sed: drop the H1 (line 1), then force every bare ```dgmo fence into
           # showcase mode so the deployed gallery demonstrates the hover-reveal
           # footer (source + copy + open-in-editor). Diagram mode ships no footer.
-          curl -fsSL https://raw.githubusercontent.com/diagrammo/dgmo-content/main/examples/all-chart-types.md | sed -e '1d' -e 's/^```dgmo$/```dgmo showcase/' >> showcase/docs/intro.md
+          curl -fsSL "$BASE/all-chart-types.md" | sed -e '1d' -e 's/^```dgmo$/```dgmo showcase/' >> showcase/docs/intro.md
 
       - name: Install showcase deps (latest published dgmo + plugin)
         run: cd showcase && pnpm install --no-frozen-lockfile
