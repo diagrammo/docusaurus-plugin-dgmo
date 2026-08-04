@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.8.1
+
+**Takes `remark-dgmo` 0.13.2, where the client half of live links was fixed.**
+
+Through 0.13.1 the browser-side freshness check threw on its first call and the
+error was swallowed, so a diagram the author had edited produced neither a
+re-render nor the *"This diagram has been updated"* notice. Nothing logged.
+
+A version bump is the whole change here, and it is required rather than
+cosmetic: 0.8.0 declares `remark-dgmo: ^0.12.0`, and **a caret on a `0.x`
+version locks the minor** — `^0.12.0` means `>=0.12.0 <0.13.0`. A site on 0.8.0
+therefore cannot reach the fix by updating `remark-dgmo` itself; the range in
+this package is what pins it. That is exactly how the GitHub Pages showcase kept
+serving the broken client after every other wrapper had moved.
+
 ## 0.8.0
 
 **🔴 Live links: renamed keyword, renamed option, and now ON by default.** All
