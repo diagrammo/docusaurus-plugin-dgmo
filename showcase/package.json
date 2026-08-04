@@ -16,7 +16,7 @@
     "github-slugger": "^1.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "remark-dgmo": "0.12.0"
+    "remark-dgmo": "0.13.2"
   },
   "engines": {
     "node": ">=20.6"
