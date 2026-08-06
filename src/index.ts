@@ -28,14 +28,22 @@ export type DocusaurusDgmoOptions = DgmoOptions;
  * API has no hook for mutating sibling preset options, so users wire
  * `remarkPlugins` manually per preset slot (see README + ADR-3).
  *
- * The `_options` parameter is reserved for forward compatibility. Today it
- * is not used because the remark plugin is wired by the user; per-block
- * fence-meta options + integration defaults are passed through there.
+ * One option is read here rather than only forwarded to the remark plugin:
+ * `liveLink.refresh`. It decides which client modules the site gets, which is
+ * this plugin's job and nothing else's — the built HTML is identical either
+ * way. `defineConfig` passes the same options object to both halves so a user
+ * configures it once.
  */
 export default function pluginDgmo(
   _ctx: LoadContext,
-  _options: DocusaurusDgmoOptions = {}
+  options: DocusaurusDgmoOptions = {}
 ): Plugin<void> {
+  // Re-rendering a moved diagram in the browser means shipping the renderer, so
+  // it stays opt-in. Before 0.8.3 this option was accepted and then ignored:
+  // the site was told it had turned re-rendering on and got the "This diagram
+  // has been updated" link forever.
+  const reRenders = options.liveLink?.refresh === 'render';
+
   return {
     name: 'docusaurus-plugin-dgmo',
     getClientModules() {
@@ -53,6 +61,9 @@ export default function pluginDgmo(
         // don't leak Docusaurus's `onRouteDidUpdate` symbol into the
         // framework-agnostic remark-dgmo core.
         require.resolve('docusaurus-plugin-dgmo/client'),
+        ...(reRenders
+          ? [require.resolve('docusaurus-plugin-dgmo/client-render')]
+          : []),
       ];
     },
     configureWebpack(_config, isServer) {

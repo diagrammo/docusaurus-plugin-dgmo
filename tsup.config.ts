@@ -6,6 +6,7 @@ export default defineConfig({
     remark: 'src/remark.ts',
     config: 'src/config.ts',
     'docusaurus-client': 'src/docusaurus-client.ts',
+    'docusaurus-render-client': 'src/docusaurus-render-client.ts',
   },
   format: ['esm'],
   dts: true,

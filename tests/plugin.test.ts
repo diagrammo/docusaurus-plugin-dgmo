@@ -29,6 +29,28 @@ describe('docusaurus-plugin-dgmo (AC-DC1, AC-DC4)', () => {
     expect(modules.some((m) => m.endsWith('.js'))).toBe(true);
   });
 
+  it('leaves the browser renderer out by default', () => {
+    const plugin = pluginDgmo(MOCK_CTX);
+    const modules = plugin.getClientModules!();
+    expect(modules.some((m) => m.includes('render-client'))).toBe(false);
+  });
+
+  it('adds the browser renderer when liveLink.refresh is render', () => {
+    const plugin = pluginDgmo(MOCK_CTX, {
+      liveLink: { refresh: 'render' },
+    });
+    const modules = plugin.getClientModules!();
+    expect(modules).toHaveLength(4);
+    const renderer = modules.find((m) => m.includes('render-client'));
+    expect(renderer, 'the render client should be registered').toBeDefined();
+    expect(existsSync(renderer!)).toBe(true);
+  });
+
+  it('leaves the browser renderer out when liveLink.refresh is notify', () => {
+    const plugin = pluginDgmo(MOCK_CTX, { liveLink: { refresh: 'notify' } });
+    expect(plugin.getClientModules!()).toHaveLength(3);
+  });
+
   it('configureWebpack returns {} for isServer=true', () => {
     const plugin = pluginDgmo(MOCK_CTX);
     const out = (

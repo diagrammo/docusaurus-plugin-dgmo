@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+**`liveLink: { refresh: 'render' }` now does what it says here.** Setting it used
+to be accepted and then ignored: the site kept getting the _"This diagram has
+been updated"_ link forever, and nothing said why. Re-rendering needs the browser
+half of the renderer on the page, and only `astro-dgmo` was putting it there.
+
+Two things were in the way, both fixed:
+
+- `defineConfig` registered the plugin by **name alone**, so the plugin was
+  handed an empty options object and could never see the setting. It now passes
+  the same options to both halves. Wiring the plugin by hand still works — give
+  it the options too.
+- The plugin now registers `docusaurus-plugin-dgmo/client-render` as a client
+  module when the setting is on. Webpack emits the renderer as its own lazy
+  chunk, so a reader downloads it only when a diagram has actually changed.
+
+Nothing changes for a site that leaves the default (`refresh: 'notify'`) alone —
+same client modules, same bytes, same HTML.
+
 ## 0.8.2
 
 **Takes `remark-dgmo` 0.14.0, where the step that asks the Cloud what a pointer
@@ -21,7 +41,7 @@ minor**, so a site on `^0.8.0` reaches 0.8.2 and would never reach 0.9.0.
 
 Through 0.13.1 the browser-side freshness check threw on its first call and the
 error was swallowed, so a diagram the author had edited produced neither a
-re-render nor the *"This diagram has been updated"* notice. Nothing logged.
+re-render nor the _"This diagram has been updated"_ notice. Nothing logged.
 
 A version bump is the whole change here, and it is required rather than
 cosmetic: 0.8.0 declares `remark-dgmo: ^0.12.0`, and **a caret on a `0.x`
@@ -61,8 +81,8 @@ the cache belongs in your repo so a clean CI checkout never depends on our
 uptime — but it is an unexplained directory until you know why it is there.
 
 With live links off, a `live-link` fence now renders a small card naming the
-diagram and linking through to it, plus a hover-revealed *"Show this diagram
-here"* link to the guide and a build warning naming the option and the source
+diagram and linking through to it, plus a hover-revealed _"Show this diagram
+here"_ link to the guide and a build warning naming the option and the source
 line. It is no longer an error block. See the
 [live links guide](https://diagrammo.app/docs/live-links/).
 

@@ -24,6 +24,17 @@ describe('defineConfig', () => {
     expect(out.plugins).toContain('docusaurus-plugin-dgmo');
   });
 
+  it('hands the plugin its options, so liveLink.refresh reaches it', async () => {
+    const out = await defineConfig(base(), {
+      dgmo: { liveLink: { refresh: 'render' } },
+    });
+    const entry = out.plugins?.find(
+      (p) => Array.isArray(p) && p[0] === 'docusaurus-plugin-dgmo'
+    ) as [string, Record<string, any>] | undefined;
+    expect(entry, 'the plugin entry should carry its options').toBeDefined();
+    expect(entry![1]['liveLink']).toEqual({ refresh: 'render' });
+  });
+
   it('respects an explicit markdown.format', async () => {
     const out = await defineConfig(
       base({ markdown: { format: 'mdx' } as NonNullable<Config['markdown']> })

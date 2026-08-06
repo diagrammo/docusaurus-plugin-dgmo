@@ -135,6 +135,35 @@ A -> B
 
 See the [`remark-dgmo` README](https://github.com/diagrammo/remark-dgmo) for the full option matrix.
 
+## Live links: when a diagram changes after you build
+
+A fence can name a published [Diagrammo Cloud](https://diagrammo.app) diagram instead of carrying its own source:
+
+````markdown
+```dgmo
+live-link dgm_01HQ3RSTUV
+```
+````
+
+The build fetches it, renders it like any other block, and writes what it fetched to `.dgmo/references/<id>.json` — **commit that directory.** It is what keeps your build reproducible and independent of our uptime.
+
+If the diagram changes after your last build, the page **notices** by default: readers get a small link to the live version. Re-drawing it in the browser instead means shipping the renderer, so it is opt-in:
+
+```ts
+export default defineConfig(
+  { title: 'My Docs' /* … */ },
+  { dgmo: { liveLink: { refresh: 'render' } } }
+);
+```
+
+`defineConfig` passes that through to the plugin, which registers the extra client module for you — no second step. Wiring the plugin by hand instead? Give it the same options, or the setting has nothing to act on:
+
+```ts
+plugins: [['docusaurus-plugin-dgmo', { liveLink: { refresh: 'render' } }]];
+```
+
+Webpack emits the renderer as its own lazy chunk, so readers download it only when a diagram has actually changed. ⚠️ If your site sets a Content-Security-Policy it must allow `connect-src https://api.diagrammo.app`, or the baked diagram renders and simply never updates.
+
 ## Working reference site
 
 [`tests/fixture/`](./tests/fixture/) is a complete minimal Docusaurus 3 site running this plugin. Copy [`tests/fixture/docusaurus.config.ts`](./tests/fixture/docusaurus.config.ts) as a template for your own site.

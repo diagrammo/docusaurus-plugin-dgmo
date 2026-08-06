@@ -95,8 +95,14 @@ export async function defineConfig(
     config.markdown = markdown as NonNullable<Config['markdown']>;
   }
 
+  // The plugin entry carries the options too, not just the name. It reads
+  // `liveLink.refresh` to decide whether the site gets the browser-side
+  // renderer, and a bare `'docusaurus-plugin-dgmo'` string hands it an empty
+  // object — which is how `refresh: 'render'` came to be accepted here and
+  // silently ignored.
   if (!hasPlugin(config.plugins, PLUGIN_NAME)) {
-    config.plugins = [...(config.plugins ?? []), PLUGIN_NAME];
+    const entry = dgmoOptions ? [PLUGIN_NAME, dgmoOptions] : PLUGIN_NAME;
+    config.plugins = [...(config.plugins ?? []), entry as PluginConfig];
   }
 
   if (Array.isArray(config.presets)) {
