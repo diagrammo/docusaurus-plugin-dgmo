@@ -5,7 +5,7 @@
   "description": "Standalone Docusaurus site that renders every dgmo chart type, deployed to GitHub Pages. NOT the test fixture — a clean minimal project that consumes the published packages, because the eval-based Docusaurus SSG is sensitive to the test fixture's dependency tree.",
   "scripts": {
     "build": "docusaurus build",
-    "start": "if command -v claim-port >/dev/null 2>&1; then claim-port 4342 || exit 1; fi; docusaurus start --port 4342"
+    "start": "if command -v claim-port >/dev/null 2>&1; then claim-port 4342 || { [ $? -eq 3 ] || exit 1; exit 0; }; fi; docusaurus start --port 4342"
   },
   "dependencies": {
     "@diagrammo/dgmo": "0.60.0",
