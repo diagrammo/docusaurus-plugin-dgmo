@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.8.3
 
 **`liveLink: { refresh: 'render' }` now does what it says here.** Setting it used
 to be accepted and then ignored: the site kept getting the _"This diagram has
