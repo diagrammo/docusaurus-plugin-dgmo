@@ -4,30 +4,47 @@
 // serve it under github.io/<repo>/ while local dev stays at root.
 const { defineConfig } = require('docusaurus-plugin-dgmo/config');
 
-module.exports = defineConfig({
-  title: 'Diagrammo × Docusaurus',
-  tagline: 'Every dgmo chart type, rendered at build time',
-  favicon: 'favicon.svg',
-  url: 'https://diagrammo.github.io',
-  baseUrl: process.env.PAGES_BASE || '/',
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
-  presets: [
-    [
-      'classic',
-      {
-        // sidebars.js derives anchor links from docs/intro.md's h2/h3
-        // headings at config-load time (single-page site — see sidebars.js).
-        docs: { routeBasePath: '/', sidebarPath: './sidebars.js' },
-        blog: false,
-        pages: false,
-        // Shared Nord page theme: imports remark-dgmo/theme-nord.css and aliases
-        // Infima's variables to its --dgmo-* tokens (see src/css/custom.css).
-        theme: { customCss: './src/css/custom.css' },
-      },
+module.exports = defineConfig(
+  {
+    title: 'Diagrammo × Docusaurus',
+    tagline: 'Every dgmo chart type, rendered at build time',
+    favicon: 'favicon.svg',
+    url: 'https://diagrammo.github.io',
+    baseUrl: process.env.PAGES_BASE || '/',
+    onBrokenLinks: 'warn',
+    onBrokenMarkdownLinks: 'warn',
+    presets: [
+      [
+        'classic',
+        {
+          // sidebars.js derives anchor links from docs/intro.md's h2/h3
+          // headings at config-load time (single-page site — see sidebars.js).
+          docs: { routeBasePath: '/', sidebarPath: './sidebars.js' },
+          blog: false,
+          pages: false,
+          // Shared Nord page theme: imports remark-dgmo/theme-nord.css and
+          // aliases Infima's variables to its --dgmo-* tokens (see
+          // src/css/custom.css).
+          theme: { customCss: './src/css/custom.css' },
+        },
+      ],
     ],
-  ],
-  themeConfig: {
-    navbar: { title: 'Diagrammo × Docusaurus' },
+    themeConfig: {
+      navbar: { title: 'Diagrammo × Docusaurus' },
+    },
   },
-});
+  {
+    // The page this builds LEADS with live links (see pages.yml), so it is the
+    // one site where re-rendering is the thing being demonstrated rather than a
+    // cost to avoid: a reader arriving here after the author has edited one of
+    // those diagrams sees the new drawing, not a link offering it.
+    //
+    // Deliberately NOT set on `tests/fixture/`, which must keep exercising the
+    // `notify` default every adopter gets — that is what makes the fixture's
+    // build assertions mean anything.
+    //
+    // 0.8.3 is what makes this line do something. Before it, the option was
+    // accepted here and dropped on the floor.
+    dgmo: { liveLink: { refresh: 'render' } },
+  }
+);

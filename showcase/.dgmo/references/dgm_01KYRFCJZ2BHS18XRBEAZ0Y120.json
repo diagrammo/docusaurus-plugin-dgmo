@@ -1,0 +1,7 @@
+{
+  "id": "dgm_01KYRFCJZ2BHS18XRBEAZ0Y120",
+  "source": "journey-map A Cabin Boy's First Voyage\n\npersona Squidlips Sam color: blue\n  Greenhorn cabin boy, first time at sea\n  Sworn to the crew but quietly terrified\n\n[Signing On]\n  Sign the articles score: 4, emotion: Hopeful\n    description: Captain reads the code aloud — pay shares, no women aboard, lights out at 8\n\n[The Tempest]\n  Caught in a squall off the reef score: 1, emotion: Terrified\n    pain: Two crewmates lost overboard before dawn\n    thought: Maybe the merchant fleet wasn't so bad after all\n  Dawn, and she still floats score: 3, emotion: Relieved\n\n[The Prize]\n  Strike the colors score: 5, emotion: Triumphant\n    description: Heavy with silver from the Veracruz mines\n\n[Homecoming]\n  Bury a share on the island score: 5, emotion: Proud\n    thought: Three doubloons hidden where only he can find them\n  Back to the Rusty Anchor score: 4, emotion: Content\n    opportunity: Next time he signs on as a full hand, not a boy\n",
+  "dgmoVersion": "0.0.0",
+  "updatedAt": 1785809771507,
+  "fetchedAt": 1786067721366
+}

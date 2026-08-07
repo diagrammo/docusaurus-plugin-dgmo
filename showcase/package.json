@@ -8,15 +8,15 @@
     "start": "if command -v claim-port >/dev/null 2>&1; then claim-port 4342 || { [ $? -eq 3 ] || exit 1; exit 0; }; fi; docusaurus start --port 4342"
   },
   "dependencies": {
-    "@diagrammo/dgmo": "0.60.0",
+    "@diagrammo/dgmo": "0.61.0",
     "@docusaurus/core": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
     "@mdx-js/react": "^3.0.0",
-    "docusaurus-plugin-dgmo": "0.8.2",
+    "docusaurus-plugin-dgmo": "0.8.4",
     "github-slugger": "^1.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "remark-dgmo": "0.14.0"
+    "remark-dgmo": "0.14.2"
   },
   "engines": {
     "node": ">=20.6"
