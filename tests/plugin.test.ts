@@ -59,13 +59,25 @@ describe('docusaurus-plugin-dgmo (AC-DC1, AC-DC4)', () => {
     expect(out).toEqual({});
   });
 
-  it('configureWebpack returns jsdom-fallback config for isServer=false', () => {
+  // `url` and `path` are here because `refresh: 'render'` pulls the renderer
+  // into the client bundle, and webpack 5 fails a build on an unpolyfilled node
+  // built-in rather than shipping it. Losing either breaks that build with a
+  // message about polyfills that says nothing about live links.
+  it('returns node-builtin fallbacks for the client bundle', () => {
     const plugin = pluginDgmo(MOCK_CTX);
     const out = (
       plugin.configureWebpack as (config: unknown, isServer: boolean) => unknown
     )({}, false);
     expect(out).toEqual({
-      resolve: { fallback: { jsdom: false, fs: false, canvas: false } },
+      resolve: {
+        fallback: {
+          jsdom: false,
+          fs: false,
+          canvas: false,
+          url: false,
+          path: false,
+        },
+      },
     });
   });
 });

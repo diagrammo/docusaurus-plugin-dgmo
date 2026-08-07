@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.8.4
+
+**`liveLink: { refresh: 'render' }` failed the build on webpack.** 0.8.3 made the
+option real, which meant the renderer entered the CLIENT bundle for the first
+time — and webpack 5 stopped polyfilling node built-ins, so it stops a build
+rather than shipping them:
+
+```
+Module not found: Error: Can't resolve 'url' in .../@diagrammo/dgmo/dist
+Module not found: Error: Can't resolve 'path' in .../@diagrammo/dgmo/dist
+```
+
+`configureWebpack` already declared `jsdom`, `fs` and `canvas` unavailable to the
+client for exactly this reason; `url` and `path` join them. The only file in
+dgmo's `dist/` that names either is `cli.cjs`, which a browser has no business
+reaching.
+
+Found by building this repo's own showcase with the option on. It could not have
+surfaced before 0.8.3, because the option was ignored and the renderer never
+reached the client bundle.
+
+⚠️ **A site turning this on also needs `@diagrammo/dgmo` 0.61.0 or newer.**
+`remark-dgmo` 0.14.2 imports `parseCloudReferenceFence`, which first ships in
+0.61.0 — on 0.60.x the build dies at module resolution. The peer range this
+package declares still says `>=0.60.0 <1` and is being corrected separately.
+
 ## 0.8.3
 
 **`liveLink: { refresh: 'render' }` now does what it says here.** Setting it used

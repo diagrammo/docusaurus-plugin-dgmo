@@ -75,7 +75,24 @@ export default function pluginDgmo(
       // transitive nags).
       if (isServer) return {};
       return {
-        resolve: { fallback: { jsdom: false, fs: false, canvas: false } },
+        resolve: {
+          fallback: {
+            jsdom: false,
+            fs: false,
+            canvas: false,
+            // `url` and `path` join the list for `liveLink.refresh: 'render'`,
+            // which is the only setting that pulls `@diagrammo/dgmo/block` into
+            // the CLIENT bundle. Webpack 5 stopped polyfilling node built-ins,
+            // so it fails the build rather than shipping them — and the only
+            // file in dgmo's dist that names either is `cli.cjs`, which a
+            // browser has no business reaching. Found 2026-08-06 by building
+            // this repo's own showcase with the option on; before 0.8.3 the
+            // option was ignored, so the client bundle never had to resolve
+            // them and this could not have surfaced.
+            url: false,
+            path: false,
+          },
+        },
       };
     },
   };
