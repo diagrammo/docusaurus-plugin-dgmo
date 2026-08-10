@@ -64,7 +64,7 @@
     "pretest": "pnpm build",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "test:e2e": "pnpm build && cd tests/fixture && pnpm install --no-frozen-lockfile && pnpm exec docusaurus build && node ../../scripts/assert-build-output.mjs",
+    "test:e2e": "pnpm build && cd tests/fixture && pnpm install --no-frozen-lockfile && rm -rf .docusaurus build node_modules/.cache && pnpm exec docusaurus build && node ../../scripts/assert-build-output.mjs",
     "test:e2e:rspack": "USE_RSPACK=1 pnpm test:e2e",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -84,7 +84,7 @@
     "remark-dgmo": "^0.14.2"
   },
   "devDependencies": {
-    "@diagrammo/dgmo": "^0.61.0",
+    "@diagrammo/dgmo": ">=0.66.0 <1",
     "@docusaurus/types": "^3.10.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.0",

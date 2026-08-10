@@ -13,6 +13,7 @@
 //      "http://www.w3.org/2000/xmlns/" (AC-DC3).
 //   4. The summed gzipped size of the page-specific JS chunks stays within
 //      100 KB of the committed baseline (or seeds the baseline on first run).
+//   5. The map block rendered real geography, not an error card.
 //
 // Exit codes: 0 on pass, 1 on any failure.
 
@@ -44,6 +45,33 @@ const html = readFileSync(HTML_PATH, 'utf8');
 
 if (!/\bdgmo-light\b/.test(html)) fail('built HTML missing dgmo-light wrapper');
 if (!/\bdgmo-dark\b/.test(html)) fail('built HTML missing dgmo-dark wrapper');
+
+// The map block. Assert on CONTENT, not on structure: dgmo >= 0.62.0 stopped
+// reading basemap geometry off disk itself, so when the integration fails to
+// supply it the map still emits a <figure> and the page still builds happily —
+// it just draws an error card or an empty frame. Only what ends up inside the
+// SVG tells a real map apart from that, so check for the error strings by name
+// and for the place labels the fence asked for.
+if (html.includes("Couldn't render this diagram")) {
+  fail('built HTML contains the dgmo error card — a diagram failed to render');
+}
+if (html.includes('no basemap data')) {
+  fail(
+    'built HTML says "no basemap data" — the integration stopped supplying ' +
+      'basemaps to dgmo blocks (dgmo >= 0.62.0 no longer reads them off disk)'
+  );
+}
+// `Miami` is the load-bearing half of this pair, and the pair is deliberate:
+// the error card echoes the opening lines of the source it could not render,
+// so `Denver` (line 3) shows up even in a broken build. `Miami` is line 4,
+// past that echo. Do not "simplify" this to a single label.
+for (const label of ['Denver', 'Miami']) {
+  if (!html.includes(label)) {
+    fail(`built HTML missing map poi label "${label}"`);
+  }
+}
+
+console.log('✓ map block rendered with basemap data and both poi labels');
 
 // Docusaurus bundles every client module's CSS (including remark-dgmo's
 // client.css, registered via getClientModules) into its combined

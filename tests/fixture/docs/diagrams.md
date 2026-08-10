@@ -72,3 +72,17 @@ TypeScript  45
 Python       30
 Rust         25
 ```
+
+## Map with points of interest
+
+Maps need basemap coastlines and borders, which the integration supplies
+to every block — the library no longer reads them off disk itself. A map
+that renders as an error card, or as labels floating on an empty page,
+means those never arrived.
+
+```dgmo
+map Port Calls
+
+poi Denver
+poi Miami
+```
