@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.8.7
+
+**Verified against `@diagrammo/dgmo` 0.71.0 and `remark-dgmo` 0.14.4.** The
+`devDependencies` range moves to `>=0.71.0 <1` and the `remark-dgmo` dependency
+to `^0.14.4`, so what the test fixture builds against is what this release was
+actually checked on.
+
+Both ranges had been left sitting where they were, and a range that is already
+satisfied is never re-resolved — `pnpm install` reported success and changed
+nothing. So the fixture had gone on building against dgmo **0.66.0** and
+remark-dgmo **0.14.3** while the declared ranges implied something newer, and
+nothing anywhere said so. Stating the ranges at the versions actually tested is
+what makes the next install move.
+
+The `@diagrammo/dgmo` **peer** range is deliberately unchanged. A peer floor is
+set by which dgmo subpaths this package and its dependencies import, and no
+import changed — raising it would forbid combinations that still work.
+
 ## 0.8.6
 
 **The licence names the company that now publishes this.** Diagrammo LLC
