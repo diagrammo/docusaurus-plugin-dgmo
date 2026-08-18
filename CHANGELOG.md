@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.8
+
+**Verified against `@diagrammo/dgmo` 0.72.0 and `remark-dgmo` 0.14.5.** The dev
+range moves to `>=0.72.0 <1` and the `remark-dgmo` dependency to `^0.14.5`, so
+what the fixture builds against is what this release was checked on.
+
+`showcase/**` is now ignored by ESLint. It is a Docusaurus site whose theme
+swizzles are JSX in `.js` files; flat config lints `.js` by default and no
+config object here supplies a JSX parser, so `pnpm lint` had failed to parse
+them since 2026-07-21 and nobody could read the gate. CI never ran lint, so
+nothing shipped broken — but nothing was being checked either.
+
 ## 0.8.7
 
 **Verified against `@diagrammo/dgmo` 0.71.0 and `remark-dgmo` 0.14.4.** The

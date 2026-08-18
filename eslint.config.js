@@ -2,7 +2,12 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'tests/fixture/**'] },
+  // showcase/ is a Docusaurus site whose theme swizzles are JSX in .js files.
+  // Flat config lints .js by default, and no config object here supplies a JSX
+  // parser, so every one of them failed to parse — the gate had been red since
+  // 2026-07-21 and nobody could read it. Ignored like tests/fixture/**, which is
+  // the same kind of directory: a demo app, not this package's source.
+  { ignores: ['dist', 'node_modules', 'tests/fixture/**', 'showcase/**'] },
   {
     extends: [
       js.configs.recommended,
