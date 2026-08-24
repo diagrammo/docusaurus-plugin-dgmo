@@ -13,11 +13,11 @@ importers:
         version: 3.10.1(@mdx-js/react@3.1.1(@types/react@19.2.14)(react@19.2.6))(esbuild@0.27.7)(postcss@8.5.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)
       remark-dgmo:
         specifier: ^0.14.5
-        version: 0.14.5(@diagrammo/dgmo@0.72.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10))
+        version: 0.14.5(@diagrammo/dgmo@0.74.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10))
     devDependencies:
       '@diagrammo/dgmo':
-        specifier: '>=0.72.0 <1'
-        version: 0.72.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)
+        specifier: '>=0.74.0 <1'
+        version: 0.74.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)
       '@docusaurus/types':
         specifier: ^3.10.0
         version: 3.10.1(clean-css@5.3.3)(cssnano@6.1.2(postcss@8.5.14))(esbuild@0.27.7)(html-minifier-terser@7.2.0)(postcss@8.5.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -999,8 +999,8 @@ packages:
   '@dagrejs/graphlib@4.0.1':
     resolution: {integrity: sha512-IvcV6FduIIAmLwnH+yun+QtV36SC7mERqa86aClNqmMN09WhmPPYU8ckHrZBozErf+UvHPWOTJYaGYiIcs0DgA==}
 
-  '@diagrammo/dgmo@0.72.0':
-    resolution: {integrity: sha512-7nWiZDJn5NOJuE2jmifOtQyOC40zGEov2dSAeb4PrrI6IMMcVcNc2LCbEKCUC5hNlqQzxXBkgdPKuniYlZY1tg==}
+  '@diagrammo/dgmo@0.74.0':
+    resolution: {integrity: sha512-xLFoHnLbyBWSx98mOao/VlAE6etpVjOhqu2YoEUwvqmaScownX+SHNjjF6QR3CBwLgwWBY+6HHi7erx0P3UgVA==}
     engines: {node: '>=20.6'}
     peerDependencies:
       '@codemirror/language': ^6.12.3
@@ -7752,7 +7752,7 @@ snapshots:
 
   '@dagrejs/graphlib@4.0.1': {}
 
-  '@diagrammo/dgmo@0.72.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)':
+  '@diagrammo/dgmo@0.74.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)':
     dependencies:
       '@dagrejs/dagre': 3.0.0
       d3-array: 3.2.4
@@ -13171,9 +13171,9 @@ snapshots:
 
   relateurl@0.2.7: {}
 
-  remark-dgmo@0.14.5(@diagrammo/dgmo@0.72.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)):
+  remark-dgmo@0.14.5(@diagrammo/dgmo@0.74.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)):
     dependencies:
-      '@diagrammo/dgmo': 0.72.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)
+      '@diagrammo/dgmo': 0.74.0(@lezer/common@1.5.2)(@lezer/highlight@1.2.3)(@lezer/lr@1.4.10)
       '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.10
