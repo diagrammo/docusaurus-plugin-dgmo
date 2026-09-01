@@ -7,7 +7,7 @@
     "start": "if command -v claim-port >/dev/null 2>&1; then claim-port 4343 || { [ $? -eq 3 ] || exit 1; exit 0; }; fi; docusaurus start --port 4343"
   },
   "dependencies": {
-    "@diagrammo/dgmo": "0.77.0",
+    "@diagrammo/dgmo": "0.80.0",
     "@docusaurus/core": "^3.10.1",
     "@docusaurus/preset-classic": "^3.10.1",
     "@mdx-js/react": "^3.0.0",
