@@ -61,7 +61,7 @@
     "postbuild": "test -f dist/docusaurus.css && test -f dist/docusaurus-render-client.js",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "pretest": "pnpm build",
+    "pretest": "pnpm build && node scripts/ensure-fixture-install.mjs",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "test:e2e": "pnpm build && cd tests/fixture && pnpm install --no-frozen-lockfile && rm -rf .docusaurus build node_modules/.cache && pnpm exec docusaurus build && node ../../scripts/assert-build-output.mjs",
