@@ -60,6 +60,7 @@
     "build": "tsup && cp styles/docusaurus.css dist/docusaurus.css",
     "postbuild": "test -f dist/docusaurus.css && test -f dist/docusaurus-render-client.js",
     "dev": "tsup --watch",
+    "pretypecheck": "node scripts/ensure-fixture-install.mjs",
     "typecheck": "tsc --noEmit",
     "pretest": "pnpm build && node scripts/ensure-fixture-install.mjs",
     "test": "vitest run --coverage",
