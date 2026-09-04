@@ -44,9 +44,6 @@ jobs:
       # both tsc and vitest follow it to resolve the self-import. CI
       # only installs root deps, so we stub the symlink directly rather
       # than running a 12k-line fixture install.
-      - name: Stub fixture self-link
-        run: mkdir -p tests/fixture/node_modules && ln -sfn ../../.. tests/fixture/node_modules/docusaurus-plugin-dgmo
-
       - name: Typecheck
         run: pnpm typecheck
 
