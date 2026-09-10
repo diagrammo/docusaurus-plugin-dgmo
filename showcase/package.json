@@ -12,11 +12,11 @@
     "@docusaurus/core": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
     "@mdx-js/react": "^3.0.0",
-    "docusaurus-plugin-dgmo": "0.8.16",
+    "docusaurus-plugin-dgmo": "0.8.17",
     "github-slugger": "^1.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "remark-dgmo": "0.15.7"
+    "remark-dgmo": "0.15.8"
   },
   "engines": {
     "node": ">=20.6"
